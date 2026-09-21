@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#123B4A">
+<meta name="description" content="COZINHA CONNECT — gestão inteligente para cozinhas e restaurantes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>COZINHA CONNECT — Azul Petróleo Moderno</title>
+<style>
+:root{--green:#123B4A;--green2:#236477;--gold:#D4A84F;--orange:#ed6a20;--cream:#F7F5EF;--white:#fff;--text:#1D2528;--muted:#737b76;--line:#e5e1d8}
+*{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--cream);color:var(--text)}
+button,input,textarea{font:inherit}button{cursor:pointer}
+.login{min-height:100vh;display:grid;place-items:center;background:linear-gradient(135deg,#0E2E3A,#236477);padding:20px}
+.login-card{width:min(430px,100%);background:#fff;border-radius:22px;padding:34px;box-shadow:0 25px 70px #0006;text-align:center}
+.brand{font-family:Georgia,serif;font-size:30px;letter-spacing:1px;color:var(--green)}.brand span{color:var(--gold)}
+.login-card h2{font-family:Georgia,serif;font-size:28px;margin:22px 0 8px}.muted{color:var(--muted);font-size:14px}
+.field{width:100%;padding:13px 14px;border:1px solid #ddd8cd;border-radius:10px;margin:6px 0 10px;outline:none}
+.field:focus{border-color:var(--gold)}.btn{border:0;border-radius:10px;padding:12px 17px;background:var(--green);color:#fff;font-weight:700}.btn.orange{background:var(--orange)}.btn.red{background:#a63b3b}.btn.light{background:#edf0ed;color:var(--green)}
+.demo{background:#f7f4ed;padding:12px;border-radius:10px;margin-top:16px;font-size:13px}
+.app{display:none;min-height:100vh}.sidebar{position:fixed;left:0;top:0;bottom:0;width:235px;background:var(--green);color:#fff;padding:24px 14px;z-index:5}.side-brand{font-family:Georgia,serif;font-size:25px;text-align:center;margin-bottom:28px}.side-brand span{color:var(--gold)}
+.nav{display:grid;gap:6px}.nav button{border:0;background:transparent;color:#dce7e1;text-align:left;padding:13px 14px;border-radius:9px;font-size:14px}.nav button.active,.nav button:hover{background:#2B7184;color:#fff}.logout{position:absolute;bottom:22px;left:14px;right:14px}
+.main{margin-left:235px}.topbar{height:70px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px}.search{width:min(430px,45vw);background:#f6f5f1;border:1px solid var(--line);border-radius:22px;padding:10px 16px}.profile{display:flex;align-items:center;gap:10px}.avatar{width:38px;height:38px;border-radius:50%;background:#D8C7A1;display:grid;place-items:center;font-weight:800;color:var(--green)}
+.content{padding:26px;max-width:1450px;margin:auto}.hero{background:linear-gradient(90deg,#123B4Af5,#236477e5),url("https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1500&q=80") center/cover;color:#fff;border-radius:16px;padding:32px;margin-bottom:18px}.hero h1{font:42px Georgia,serif;margin:7px 0}.eyebrow{letter-spacing:3px;font-size:11px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.stat,.panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 3px 12px #00000009}.stat{display:flex;align-items:center;gap:14px}.ico{width:45px;height:45px;border-radius:11px;display:grid;place-items:center;font-size:22px;background:#F3E8D2}.stat b{font-size:27px}.stat small{display:block;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1.5fr 1fr;gap:18px;margin-top:18px}.grid3{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+.panel h2{font:24px Georgia,serif;margin:0 0 14px}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.table{width:100%;border-collapse:collapse;font-size:13px}.table th,.table td{text-align:left;padding:12px 8px;border-bottom:1px solid #eee}.table th{color:#6d756f;font-size:11px;text-transform:uppercase}.status{padding:5px 9px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}.pending{background:#fff0d6;color:#9a6400}.approved{background:#e2f3e7;color:#216b43}.rejected{background:#f6dfdf;color:#983737}
+.list{display:grid;gap:9px}.list-item{padding:12px;border:1px solid #eee;border-radius:10px;display:flex;justify-content:space-between;gap:12px}.list-item b{display:block}.notice{background:#faf2df;border-left:4px solid var(--gold);padding:13px;border-radius:9px;margin-bottom:10px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.full{grid-column:1/-1}
+.modal{position:fixed;inset:0;background:#0008;display:none;place-items:center;padding:20px;z-index:20}
+.modal.show{display:grid}.modal-card{width:min(520px,100%);background:#fff;border-radius:16px;padding:24px;box-shadow:0 25px 70px #0008}
+.modal-card h3{font:25px Georgia,serif;margin:0 0 15px}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+.mobile-menu{display:none}
+
+.notice-photo{width:100%;max-height:230px;object-fit:cover;border-radius:10px;margin:10px 0 8px;display:block}
+.photo-label{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border:1px dashed #c9c3b6;border-radius:10px;background:#faf8f2;cursor:pointer;color:#4b554f;font-weight:600;margin:6px 0 10px}
+.photo-preview{display:none;width:100%;max-height:180px;object-fit:cover;border-radius:10px;margin:8px 0}
+
+.recipe-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.recipe-card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 3px 12px #00000009}
+.recipe-photo{width:100%;height:170px;object-fit:cover;display:block;background:#eee}
+.recipe-body{padding:15px}.recipe-body h3{font:21px Georgia,serif;margin:0 0 7px;color:var(--green)}
+.recipe-tag{display:inline-block;background:#F3E8D2;color:#7A5A20;padding:5px 8px;border-radius:20px;font-size:10px;font-weight:700;margin-bottom:9px}
+.recipe-actions{display:flex;gap:7px;margin-top:12px}.empty-photo{height:170px;display:grid;place-items:center;background:#f1eee7;color:#777;font-size:40px}
+.recipe-form{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:18px}
+
+.ingredient-box{margin-top:15px;padding:15px;background:#faf8f2;border:1px solid var(--line);border-radius:12px}
+.ingredient-row{display:grid;grid-template-columns:1fr 130px 90px 40px;gap:8px;margin-bottom:8px;align-items:center}
+.ingredient-row input{min-width:0}.calc-box{margin-top:18px;padding:18px;background:#f5f1e8;border-radius:12px}
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.result-table{width:100%;border-collapse:collapse;margin-top:12px}
+.result-table th,.result-table td{text-align:left;padding:9px;border-bottom:1px solid var(--line)}
+@media(max-width:600px){.ingredient-row{grid-template-columns:1fr 90px 70px 38px}.calc-grid{grid-template-columns:1fr}}
+
+.recipe-add-modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:18px;z-index:9999}
+.recipe-add-modal.show{display:flex}
+.recipe-add-card{background:#fff;width:min(720px,100%);max-height:92vh;overflow:auto;border-radius:18px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.recipe-add-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:15px}
+.recipe-add-head h2{margin:0;font:26px Georgia,serif;color:var(--green)}
+.recipe-close{border:0;background:#eee;border-radius:50%;width:36px;height:36px;font-size:20px;cursor:pointer}
+@media(max-width:900px){.recipe-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.recipe-grid{grid-template-columns:1fr}}
+@media(max-width:900px){.sidebar{display:none}.main{margin-left:0}.mobile-menu{display:block}.stats{grid-template-columns:repeat(2,1fr)}.grid2,.grid3{grid-template-columns:1fr}.topbar{padding:0 14px}.search{display:none}.content{padding:15px}.hero h1{font-size:31px}}
+@media(max-width:520px){.stats{grid-template-columns:1fr 1fr}.stat{padding:13px}.stat b{font-size:23px}.table{font-size:12px}.hide-mobile{display:none}.form-grid{grid-template-columns:1fr}}
+
+
+/* Miniaturas do Mural */
+.notice-photo{
+  width:96px;
+  height:72px;
+  object-fit:cover;
+  object-position:center;
+  border-radius:10px;
+  display:block;
+  cursor:pointer;
+  margin:0 0 10px 0;
+}
+.notice-photo:hover{transform:scale(1.03)}
+
+.employee-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.employee-card{position:relative}.employee-top{display:flex;gap:14px;align-items:center}.employee-photo{width:72px;height:72px;border-radius:50%;object-fit:cover;background:#f0f2ef;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#59615b;flex:none}.employee-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.employee-status{position:absolute;right:16px;top:16px}@media(max-width:800px){.employee-grid{grid-template-columns:1fr 1fr}}@media(max-width:520px){.employee-grid{grid-template-columns:1fr}}
+
+.config-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field-label{display:block;font-size:12px;font-weight:800;margin:0 0 6px;color:#555;text-transform:uppercase;letter-spacing:.04em}@media(max-width:700px){.config-grid{grid-template-columns:1fr}}
+
+@media print{
+  body *{visibility:hidden !important}
+  #printPurchaseList,#printPurchaseList *{visibility:visible !important}
+  #printPurchaseList{position:absolute;left:0;top:0;width:100%;padding:24px;background:#fff}
+  .no-print{display:none !important}
+  .print-check{display:inline-block!important;margin-right:8px}
+}
+.print-list-box{margin-top:18px;border:1px solid #d9ded9;border-radius:14px;padding:18px;background:#fff}
+.print-list-row{display:grid;grid-template-columns:30px 1fr 130px 100px;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid #eee}
+.print-list-row:last-child{border-bottom:0}
+.print-list-head{font-weight:800;display:grid;grid-template-columns:30px 1fr 130px 100px;gap:12px;padding-bottom:10px;border-bottom:2px solid #333}
+.approve-note{font-size:12px;color:#667;margin-top:6px}
+
+
+/* ===== COZINHA CONNECT — LAYOUT PREMIUM V2 ===== */
+:root{
+  --green:#123B4A;--green-deep:#0B2A36;--green-soft:#eaf4ee;--gold:#D4A84F;
+  --gold-soft:#f5ead4;--cream:#f6f3ec;--ink:#17221d;--muted:#718078;--line:#e7e3da;
+  --red:#d83d3d;--blue:#356fc3;--yellow:#d99b28;--purple:#6d55b5;
+}
+body{background:#f5f3ee;color:var(--ink)}
+.sidebar{width:248px;background:linear-gradient(180deg,#0E3342 0%,#123B4A 55%,#0B2A36 100%);padding:22px 15px;box-shadow:10px 0 35px rgba(0,0,0,.08)}
+.side-brand{font-family:Georgia,serif;font-size:25px;letter-spacing:2px;margin:4px 0 8px}.side-brand:before{content:'♨';display:block;font-size:30px;color:var(--gold);line-height:1;margin-bottom:7px}.side-brand:after{content:'TECNOLOGIA • ORGANIZAÇÃO • RESULTADOS';display:block;font-family:Segoe UI,Arial,sans-serif;font-size:8px;letter-spacing:2px;color:#C9D9DE;margin-top:8px}
+.nav{margin-top:28px;gap:7px}.nav button{border:1px solid transparent;padding:13px 15px;border-radius:13px;font-size:14px;font-weight:650;transition:.2s}.nav button.active{background:linear-gradient(90deg,#b89450,#a98649);box-shadow:0 8px 20px rgba(0,0,0,.12)}.nav button:hover{background:#1C5A6A}
+.logout{background:rgba(255,255,255,.1)!important;color:#fff!important;border:1px solid rgba(255,255,255,.12)!important}
+.main{margin-left:248px}.topbar{height:74px;background:rgba(255,255,255,.96);padding:0 30px;position:sticky;top:0;z-index:4;box-shadow:0 1px 0 var(--line)}.search{width:min(520px,48vw);background:#f4f5f2;border:1px solid #e4e8e4;padding:11px 18px}.profile{gap:11px}.profile .avatar{width:42px;height:42px;box-shadow:0 0 0 3px #f0eadc}.content{padding:28px;max-width:1500px}
+.hero{position:relative;overflow:hidden;border-radius:20px;padding:38px 42px;min-height:190px;background:linear-gradient(90deg,rgba(14,46,58,.96) 0%,rgba(18,59,76,.80) 45%,rgba(18,59,76,.40) 100%),url("https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1800&q=85") center/cover;box-shadow:0 14px 35px rgba(10,35,28,.13);margin-bottom:20px}.hero:after{content:'Disciplina\A também tem sabor.';white-space:pre;position:absolute;right:35px;top:38px;font-family:cursive;font-size:24px;line-height:1.2;color:#fff;opacity:.9;transform:rotate(-4deg)}.hero h1{font-size:44px;margin:10px 0 8px}.hero p{font-size:17px;margin:0;max-width:470px}.eyebrow{color:#e2b75f;font-weight:800;letter-spacing:3px}
+.stats{grid-template-columns:repeat(4,1fr);gap:15px}.stat{border:0;border-radius:16px;padding:18px 19px;min-height:105px;box-shadow:0 7px 22px rgba(31,42,37,.06);position:relative;overflow:hidden}.stat:after{content:'›';position:absolute;right:17px;bottom:12px;color:#768078;font-size:20px}.stat .ico{width:48px;height:48px;border-radius:14px;font-size:23px}.stat:nth-child(1){background:#eaf5ee}.stat:nth-child(2){background:#fff0f0}.stat:nth-child(3){background:#edf4ff}.stat:nth-child(4){background:#fff5df}.stat b{font-size:30px}.stat small{font-weight:700;color:#56635c;margin-top:3px}
+.grid2{grid-template-columns:1.25fr 1fr;gap:18px;margin-top:18px}.grid3{grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}.panel{border:0;border-radius:17px;padding:20px;box-shadow:0 7px 22px rgba(31,42,37,.06)}.panel h2{font-family:Segoe UI,Arial,sans-serif;font-size:17px;font-weight:800;margin:0 0 14px}.panel-head{border-bottom:1px solid #eeeae2;padding-bottom:12px;margin-bottom:10px}.panel-head .btn{font-size:11px;padding:9px 12px}
+.table{font-size:12px}.table th{font-size:10px;letter-spacing:.06em}.table th,.table td{padding:11px 7px}.status-select{border:1px solid #ddd9cf;border-radius:9px;padding:7px 8px;background:#fff;font-size:11px}.list-item{border:1px solid #eeeae3;border-radius:12px;background:#fff;transition:.15s}.list-item:hover{border-color:#d9d1c1;transform:translateY(-1px)}.notice{background:#F8F4E9;border-left:4px solid var(--gold)}
+.mobile-bottom{display:none}
+.home-two{display:grid;grid-template-columns:1.05fr 1fr;gap:18px;margin-top:18px}.purchase-chart{display:flex;align-items:center;gap:25px}.donut{width:145px;height:145px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--red) var(--p),var(--yellow) 0 var(--b),#37a46a 0 var(--c),var(--blue) 0 var(--d),#aeb5b1 0);flex:none}.donut:after{content:'';width:88px;height:88px;background:#fff;border-radius:50%}.donut-center{position:absolute;text-align:center;z-index:1}.donut-wrap{position:relative;display:grid;place-items:center}.donut-center strong{display:block;font-size:24px}.legend{display:grid;gap:8px;font-size:12px}.legend i{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:7px}.event-date{width:47px;height:47px;border-radius:10px;background:#f0f2ef;display:grid;place-items:center;text-align:center;font-weight:800;font-size:11px;flex:none}.task-list{display:grid;gap:8px}.task{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid #eee}.task:last-child{border-bottom:0}.task .check{width:20px;height:20px;border-radius:6px;background:#e5f2e9;color:#1f7047;display:grid;place-items:center;font-size:12px}.section-label{font-size:11px;font-weight:900;letter-spacing:.08em;color:#69756e;text-transform:uppercase;margin:0 0 10px}.quote-card{background:linear-gradient(135deg,#082c22,#236477);color:#fff;min-height:170px;display:flex;align-items:center;padding:25px;border-radius:17px;position:relative;overflow:hidden}.quote-card:after{content:'🍝';position:absolute;right:25px;bottom:-15px;font-size:90px;opacity:.16}.quote-card p{font:22px Georgia,serif;max-width:420px;margin:0}.employee-mini{display:flex;gap:12px;align-items:center}.employee-mini .employee-photo{width:48px;height:48px;font-size:16px}.badge-dot{width:9px;height:9px;border-radius:50%;background:#32a565;display:inline-block;border:2px solid #fff;box-shadow:0 0 0 1px #d6ddd8}
+.mobile-menu{display:none}
+@media(max-width:1050px){.stats{grid-template-columns:repeat(2,1fr)}.grid2,.grid3,.home-two{grid-template-columns:1fr}}
+@media(max-width:900px){.sidebar{display:none}.sidebar.mobile-open{display:block;width:280px;box-shadow:20px 0 50px rgba(0,0,0,.3)}.main{margin-left:0}.mobile-menu{display:block!important;padding:9px 12px!important}.topbar{padding:0 15px}.search{display:none}.content{padding:15px 14px 88px}.hero{padding:28px 24px;min-height:175px}.hero h1{font-size:34px}.hero:after{right:20px;top:25px;font-size:18px;max-width:130px}.mobile-bottom{display:grid;position:fixed;left:0;right:0;bottom:0;height:66px;background:rgba(255,255,255,.98);border-top:1px solid #e4e0d7;grid-template-columns:repeat(5,1fr);z-index:10;box-shadow:0 -5px 20px rgba(0,0,0,.07)}.mobile-bottom button{border:0;background:transparent;color:#66736c;font-size:10px;font-weight:800}.mobile-bottom button span{display:block;font-size:21px;margin-bottom:2px}.mobile-bottom button.active{color:var(--green)}.mobile-bottom button.active span{filter:saturate(1.3)}}
+@media(max-width:520px){.stats{grid-template-columns:1fr 1fr;gap:10px}.stat{padding:13px;min-height:95px}.stat b{font-size:24px}.stat .ico{width:40px;height:40px;font-size:20px}.stat small{font-size:10px}.hero{padding:24px 20px}.hero h1{font-size:31px}.hero p{font-size:14px;max-width:270px}.hero:after{display:none}.panel{padding:16px}.purchase-chart{gap:14px}.donut{width:118px;height:118px}.donut:after{width:72px;height:72px}.topbar{height:64px}.profile>div:last-child{display:none}.content{padding-left:11px;padding-right:11px}.table-wrap{overflow-x:auto}.table{min-width:650px}.grid2,.grid3{gap:12px}}
+
+</style>
+</head>
+<style id="cc-pro-dashboard">
+/* COZINHA CONNECT — Dashboard profissional */
+.pro-dashboard{--pro-ink:#102f3b;--pro-teal:#123b4a;--pro-teal2:#236477;--pro-gold:#d4a84f;--pro-bg:#f5f3ee;--pro-line:#e7e3da;--pro-muted:#68767a}
+.pro-dashboard .pro-hero{position:relative;min-height:218px;border-radius:18px;overflow:hidden;margin-bottom:18px;background:linear-gradient(90deg,rgba(5,29,38,.96) 0%,rgba(9,43,54,.78) 48%,rgba(9,43,54,.35) 100%),url("https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1600&q=85") center/cover;color:#fff;padding:34px 38px;display:flex;align-items:center;justify-content:space-between}
+.pro-dashboard .pro-hero-copy{max-width:610px}.pro-dashboard .pro-eyebrow{font-size:11px;letter-spacing:.18em;font-weight:800;opacity:.8}.pro-dashboard .pro-hero h1{font:44px Georgia,serif;margin:7px 0 5px;color:#fff}.pro-dashboard .pro-hero h1 span{color:var(--pro-gold)}.pro-dashboard .pro-hero p{font-size:16px;line-height:1.45;margin:0;color:#f1f4f2}.pro-dashboard .pro-hero-meta{display:flex;gap:26px;align-self:flex-start;padding-top:8px;font-size:12px;text-align:right}.pro-dashboard .pro-hero-meta strong{display:block;font-size:14px;margin-top:3px}.pro-dashboard .pro-divider{width:40px;height:3px;background:var(--pro-gold);margin-top:18px;border-radius:5px}
+.pro-dashboard .pro-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.pro-dashboard .pro-kpi{background:#fff;border:1px solid var(--pro-line);border-radius:15px;padding:17px 18px;min-height:108px;display:flex;gap:14px;align-items:center;box-shadow:0 6px 20px rgba(16,47,59,.05);position:relative}.pro-dashboard .pro-kpi-icon{width:47px;height:47px;border-radius:13px;background:#edf3f4;display:grid;place-items:center;font-size:22px;flex:none}.pro-dashboard .pro-kpi:nth-child(2) .pro-kpi-icon{background:#fbf0dc}.pro-dashboard .pro-kpi:nth-child(3) .pro-kpi-icon{background:#eaf0f6}.pro-dashboard .pro-kpi:nth-child(4) .pro-kpi-icon{background:#f8efe0}.pro-dashboard .pro-kpi-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:900;color:#66757a}.pro-dashboard .pro-kpi-number{font-size:30px;line-height:1;font-weight:800;color:var(--pro-ink);margin:6px 0}.pro-dashboard .pro-kpi-sub{font-size:11px;color:var(--pro-muted)}
+.pro-dashboard .pro-row{display:grid;gap:16px;margin-top:16px}.pro-dashboard .pro-row.main-row{grid-template-columns:1.05fr 1.2fr .95fr}.pro-dashboard .pro-row.bottom-row{grid-template-columns:1.05fr 1fr 1fr}.pro-dashboard .pro-panel{background:#fff;border:1px solid var(--pro-line);border-radius:16px;padding:18px;box-shadow:0 6px 20px rgba(16,47,59,.045);min-width:0}.pro-dashboard .pro-panel.dark{background:linear-gradient(145deg,#0c3442,#123b4a);color:#fff;border-color:#123b4a}.pro-dashboard .pro-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}.pro-dashboard .pro-title{font-size:15px;font-weight:850;color:var(--pro-ink);margin:0}.pro-dashboard .dark .pro-title{color:#fff}.pro-dashboard .pro-link{border:0;background:transparent;color:#607177;font-size:11px;font-weight:700;cursor:pointer;padding:4px}.pro-dashboard .dark .pro-link{color:#dce8eb}
+.pro-dashboard .purchase-flex{display:flex;align-items:center;gap:20px}.pro-dashboard .pro-donut-wrap{position:relative;width:145px;height:145px;flex:none;display:grid;place-items:center}.pro-dashboard .pro-donut{width:145px;height:145px;border-radius:50%;background:conic-gradient(#d83d3d 0 16%,#d9a12e 16% 38%,#37a46a 38% 72%,#356fc3 72% 83%,#9da6a9 83%);position:relative}.pro-dashboard .pro-donut:after{content:"";position:absolute;inset:27px;background:#fff;border-radius:50%}.pro-dashboard .pro-donut-center{position:absolute;z-index:1;text-align:center;color:var(--pro-ink)}.pro-dashboard .pro-donut-center strong{display:block;font-size:26px}.pro-dashboard .pro-donut-center span{font-size:10px;color:#6d777b}.pro-dashboard .pro-legend{display:grid;gap:8px;font-size:11px}.pro-dashboard .pro-legend span{display:flex;align-items:center;gap:8px}.pro-dashboard .pro-dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.pro-dashboard .pro-table{width:100%;border-collapse:collapse;font-size:12px}.pro-dashboard .pro-table th{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:#7b878b;text-align:left;padding:7px 6px;border-bottom:1px solid #ece9e2}.pro-dashboard .pro-table td{padding:10px 6px;border-bottom:1px solid #f0eee9;color:#273c43}.pro-dashboard .pro-table tr:last-child td{border-bottom:0}.pro-dashboard .pro-pill{display:inline-flex;padding:4px 8px;border-radius:999px;font-size:9px;font-weight:800;white-space:nowrap}.pro-dashboard .pro-pill.pending{background:#fff0f0;color:#a52d2d}.pro-dashboard .pro-pill.buying{background:#fff2d8;color:#946000}.pro-dashboard .pro-pill.done{background:#e5f4ea;color:#227044}.pro-dashboard .pro-pill.delivered{background:#e8f0fb;color:#2e61a7}
+.pro-dashboard .pro-event{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid #eeeae3}.pro-dashboard .pro-event:last-child{border-bottom:0}.pro-dashboard .pro-date{width:45px;height:45px;border-radius:10px;background:#eff2f0;display:grid;place-items:center;text-align:center;font-weight:900;font-size:10px;color:var(--pro-ink);flex:none}.pro-dashboard .pro-event b{display:block;font-size:12px;color:var(--pro-ink)}.pro-dashboard .pro-event small{display:block;color:#7a8589;margin-top:4px;font-size:10px}.pro-dashboard .pro-event-tag{margin-left:auto;background:#fbefd3;color:#9a6508;border-radius:999px;padding:4px 7px;font-size:8px;font-weight:900}
+.pro-dashboard .pro-employee{display:flex;align-items:center;gap:10px;padding:8px 0}.pro-dashboard .pro-avatar{width:42px;height:42px;border-radius:50%;background:#dbe2e0;display:grid;place-items:center;font-size:13px;font-weight:800;color:var(--pro-teal);overflow:hidden;flex:none}.pro-dashboard .pro-avatar img{width:100%;height:100%;object-fit:cover}.pro-dashboard .pro-employee b{font-size:12px;color:var(--pro-ink);display:block}.pro-dashboard .pro-employee small{font-size:10px;color:#788489}.pro-dashboard .pro-online{width:8px;height:8px;border-radius:50%;background:#32a565;margin-left:auto;box-shadow:0 0 0 3px #e5f4eb}
+.pro-dashboard .pro-task{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid #eeeae3;font-size:11px}.pro-dashboard .pro-task:last-child{border-bottom:0}.pro-dashboard .pro-check{width:19px;height:19px;border-radius:5px;background:#e6f3ea;color:#237247;display:grid;place-items:center;font-size:11px;font-weight:900;flex:none}.pro-dashboard .pro-count{margin-left:auto;min-width:21px;height:21px;border-radius:50%;background:#df403f;color:#fff;display:grid;place-items:center;font-size:9px;font-weight:900}.pro-dashboard .pro-quote{min-height:170px;background:linear-gradient(135deg,rgba(7,43,53,.96),rgba(35,100,119,.78)),url("https://images.unsplash.com/photo-1606923829579-0cb981a83e9e?auto=format&fit=crop&w=1000&q=80") center/cover;border-radius:16px;color:#fff;padding:25px;display:flex;align-items:flex-end}.pro-dashboard .pro-quote p{font:21px Georgia,serif;line-height:1.25;max-width:320px;margin:0}.pro-dashboard .pro-quote i{display:block;width:36px;height:3px;background:var(--pro-gold);margin-top:15px}
+.pro-dashboard .pro-empty{font-size:12px;color:#788489;padding:15px 0}.pro-dashboard .pro-mini-note{font-size:10px;color:#7a8589;margin-top:5px}
+@media(max-width:1150px){.pro-dashboard .pro-row.main-row{grid-template-columns:1fr 1fr}.pro-dashboard .pro-row.main-row .pro-panel:last-child{grid-column:1/-1}.pro-dashboard .pro-row.bottom-row{grid-template-columns:1fr 1fr}.pro-dashboard .pro-row.bottom-row .pro-quote{grid-column:1/-1}.pro-dashboard .pro-kpis{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.pro-dashboard .pro-hero{min-height:205px;padding:25px 21px;align-items:flex-end}.pro-dashboard .pro-hero h1{font-size:34px}.pro-dashboard .pro-hero p{font-size:13px}.pro-dashboard .pro-hero-meta{display:none}.pro-dashboard .pro-kpis{grid-template-columns:1fr 1fr;gap:9px}.pro-dashboard .pro-kpi{min-height:91px;padding:12px;gap:9px}.pro-dashboard .pro-kpi-icon{width:38px;height:38px;font-size:18px}.pro-dashboard .pro-kpi-number{font-size:23px}.pro-dashboard .pro-kpi-label{font-size:8px}.pro-dashboard .pro-kpi-sub{font-size:9px}.pro-dashboard .pro-row.main-row,.pro-dashboard .pro-row.bottom-row{grid-template-columns:1fr}.pro-dashboard .pro-row.main-row .pro-panel:last-child,.pro-dashboard .pro-row.bottom-row .pro-quote{grid-column:auto}.pro-dashboard .purchase-flex{justify-content:center}.pro-dashboard .pro-table{min-width:540px}.pro-dashboard .pro-table-wrap{overflow-x:auto}.pro-dashboard .pro-quote{min-height:145px}.pro-dashboard .pro-quote p{font-size:18px}.pro-dashboard .pro-panel{padding:15px}}
+</style>
+<body>
+
+<section id="login" class="login">
+  <div class="login-card">
+    <div style="font-size:48px">♨</div>
+    <div class="brand">COZINHA <span>CONNECT</span></div>
+    <h2>Bem-vindo</h2>
+    <p class="muted">O canal de comunicação e organização da cozinha.</p>
+    <input id="loginUser" class="field" placeholder="Usuário">
+    <input id="loginPass" class="field" type="password" placeholder="Senha">
+    <button class="btn orange" style="width:100%" onclick="login()">ENTRAR</button>
+    <div class="demo">Teste ADM: <b>admin / 1234</b><br>Teste Funcionário: <b>joao / 1234</b></div>
+  </div>
+</section>
+
+<section id="app" class="app">
+<aside class="sidebar">
+  <div class="side-brand">COZINHA <span>CONNECT</span></div>
+  <div class="nav" id="nav">
+    <button data-tab="inicio" class="active" onclick="navigate('inicio')">⌂ &nbsp; Início</button>
+    <button data-tab="compras" onclick="navigate('compras')">🛒 &nbsp; Compras</button>
+    <button data-tab="receitas" onclick="navigate('receitas')">📖 &nbsp; Receitas</button>
+    <button data-tab="agenda" onclick="navigate('agenda')">📅 &nbsp; Agenda</button>
+    <button data-tab="avisos" onclick="navigate('avisos')">📢 &nbsp; Mural de Avisos</button>
+    <button data-tab="funcionarios" onclick="navigate('funcionarios')">👥 &nbsp; Funcionários</button>
+    <button data-tab="config" onclick="navigate('config')">⚙ &nbsp; Configurações</button>
+  </div>
+  <button class="btn light logout" onclick="logout()">↪ Sair</button>
+</aside>
+
+<main class="main">
+  <header class="topbar">
+    <button class="btn light mobile-menu" onclick="toggleMobileMenu()">☰</button>
+    <input class="search" placeholder="⌕  Buscar no sistema...">
+    <div class="profile"><span>🔔</span><div id="avatar" class="avatar">HG</div><div><b id="profileName">Hyagho Gomes</b><div class="muted" id="profileRole">Administrador</div></div></div>
+  </header>
+  <div class="content" id="content"></div>
+</main>
+<nav class="mobile-bottom" id="mobileBottom">
+  <button data-mobile-tab="inicio" class="active" onclick="navigate('inicio')"><span>⌂</span>Início</button>
+  <button data-mobile-tab="compras" onclick="navigate('compras')"><span>🛒</span>Compras</button>
+  <button data-mobile-tab="agenda" onclick="navigate('agenda')"><span>📅</span>Agenda</button>
+  <button data-mobile-tab="avisos" onclick="navigate('avisos')"><span>📢</span>Mural</button>
+  <button onclick="toggleMobileMenu()"><span>☰</span>Mais</button>
+</nav>
+</section>
+
+<div id="noticeModal" class="modal" onclick="if(event.target===this)closeNotice()">
+  <div class="modal-card">
+    <h3>📢 Publicar novo aviso</h3>
+    <input id="noticeTitle" class="field" placeholder="Título do aviso">
+    <textarea id="noticeText" class="field" rows="4" placeholder="Digite a mensagem para a equipe"></textarea>
+    <label class="photo-label" for="noticePhoto">📷 Adicionar foto ao aviso</label>
+    <input id="noticePhoto" type="file" accept="image/*" style="display:none" onchange="previewNoticePhoto(event)">
+    <img id="noticePreview" class="photo-preview" alt="Prévia da foto">
+    <div class="modal-actions">
+      <button class="btn light" onclick="closeNotice()">CANCELAR</button>
+      <button class="btn orange" onclick="confirmNotice()">PUBLICAR AVISO</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let role="", data=JSON.parse(localStorage.getItem("cozinha_connect_demo")||"null")||{
+  compras:[
+    {id:1,produto:"Tomate",qtd:"10 kg",usuario:"João",obs:"Falta para o jantar",status:"Pendente",data:"06/09 10:24"},
+    {id:2,produto:"Cebola",qtd:"5 kg",usuario:"Ana",obs:"",status:"Comprado",data:"06/09 09:18"},
+    {id:3,produto:"Carne bovina",qtd:"8 kg",usuario:"Marcos",obs:"Para o evento",status:"Pendente",data:"06/09 08:50"},
+    {id:4,produto:"Queijo muçarela",qtd:"3 kg",usuario:"Letícia",obs:"",status:"Compra negada",motivoNegativa:"Solicitação recusada.",data:"05/09 16:12"}
+  ],
+  avisos:[
+    {t:"Reunião da equipe",d:"Reunião hoje às 15h na cozinha.",data:"06/09/2026"},
+    {t:"Manutenção do forno",d:"Forno em manutenção amanhã pela manhã.",data:"07/09/2026"}
+  ],
+  receitas:[
+    {id:1,nome:"Molho Bolonhesa",categoria:"Massas",descricao:"Molho tradicional de carne para massas.",img:""},
+    {id:2,nome:"Risoto de Funghi",categoria:"Pratos principais",descricao:"Risoto cremoso com funghi.",img:""},
+    {id:3,nome:"Filé ao Molho Poivre",categoria:"Pratos principais",descricao:"Filé com molho poivre da cozinha.",img:""}
+  ]
+};
+
+if(!Array.isArray(data.funcionarios)) data.funcionarios=[{id:'func-joao',nome:'João Silva',cargo:'Cozinheiro',usuario:'joao',senha:'1234',ativo:true,imagem:''},{id:'func-ana',nome:'Ana Souza',cargo:'Auxiliar de cozinha',usuario:'ana',senha:'1234',ativo:true,imagem:''},{id:'func-marcos',nome:'Marcos Lima',cargo:'Churrasqueiro',usuario:'marcos',senha:'1234',ativo:true,imagem:''},{id:'func-leticia',nome:'Letícia Alves',cargo:'Auxiliar de cozinha',usuario:'leticia',senha:'1234',ativo:true,imagem:''}];
+
+function save(){localStorage.setItem("cozinha_connect_demo",JSON.stringify(data))}
+
+// Padroniza status antigos das compras para o novo fluxo de 5 estados.
+(function normalizarStatusCompras(){
+  if(!Array.isArray(data.compras)) data.compras=[];
+  let alterou=false;
+  data.compras.forEach(x=>{
+    if(x.status==="Aprovada"){x.status="Em compra"; alterou=true;}
+    else if(x.status==="Recusada"){x.status="Compra negada"; if(!x.motivoNegacao) x.motivoNegacao="Solicitação recusada anteriormente."; alterou=true;}
+    if(x.id==null || x.id===""){x.id="compra-"+Date.now()+"-"+Math.random().toString(36).slice(2,8); alterou=true;}
+  });
+  if(alterou) save();
+})()
+if(!data.config || typeof data.config!=="object" || Array.isArray(data.config)) data.config={};
+if(!data.config.empresa) data.config.empresa="";
+if(!data.config.telefone) data.config.telefone="";
+if(!data.config.whatsapp) data.config.whatsapp="";
+if(!data.config.endereco) data.config.endereco="";
+if(!data.config.responsavel) data.config.responsavel="";
+if(!data.config.logo) data.config.logo="";
+if(!data.config.adminUsuario) data.config.adminUsuario="admin";
+if(!data.config.adminSenha) data.config.adminSenha="1234";
+save();
+
+// Garante IDs permanentes para avisos antigos que foram criados antes do botão EXCLUIR.
+(function normalizarIdsAvisos(){
+  if(!Array.isArray(data.avisos)) data.avisos=[];
+  let alterou=false;
+  data.avisos.forEach((a,i)=>{
+    if(a.id==null || a.id===""){ a.id="aviso-"+Date.now()+"-"+i+"-"+Math.random().toString(36).slice(2,7); alterou=true; }
+  });
+  if(alterou) save();
+})();
+if(!Array.isArray(data.agenda)) data.agenda=[];
+(function normalizarIdsAgenda(){
+  let alterou=false;
+  data.agenda.forEach((e,i)=>{
+    if(e.id==null || e.id===""){ e.id="evento-"+Date.now()+"-"+i+"-"+Math.random().toString(36).slice(2,7); alterou=true; }
+  });
+  if(alterou) save();
+})();
+if(!Array.isArray(data.receitas)) data.receitas=[
+  {id:1,nome:"Molho Bolonhesa",categoria:"Massas",descricao:"Molho tradicional de carne para massas.",img:"",ingredientes:[{nome:"Carne moída",qtd:10,un:"kg"},{nome:"Molho de tomate",qtd:2,un:"kg"},{nome:"Cebola",qtd:1,un:"kg"},{nome:"Sal",qtd:100,un:"g"}]},
+  {id:2,nome:"Risoto de Funghi",categoria:"Pratos principais",descricao:"Risoto cremoso com funghi.",img:"",ingredientes:[{nome:"Arroz arbóreo",qtd:1,un:"kg"},{nome:"Funghi",qtd:200,un:"g"},{nome:"Caldo",qtd:2,un:"L"},{nome:"Parmesão",qtd:150,un:"g"}]},
+  {id:3,nome:"Filé ao Molho Poivre",categoria:"Pratos principais",descricao:"Filé com molho poivre da cozinha.",img:"",ingredientes:[{nome:"Filé",qtd:1,un:"kg"},{nome:"Creme de leite",qtd:500,un:"ml"},{nome:"Pimenta",qtd:30,un:"g"},{nome:"Sal",qtd:15,un:"g"}]}
+];
+data.receitas.forEach(r=>{if(!Array.isArray(r.ingredientes))r.ingredientes=[];});
+if(Array.isArray(data.avisos)){
+  let avisosChanged=false;
+  data.avisos.forEach((a,i)=>{ if(a.id==null){ a.id=Date.now()+i+Math.floor(Math.random()*1000); avisosChanged=true; } });
+  if(avisosChanged) save();
+}
+
+function getCurrentEmployee(){
+  return (data.funcionarios||[]).find(f=>String(f.id)===String(window.currentEmployeeId))||null;
+}
+function currentEmployeeName(){
+  const f=getCurrentEmployee(); return f ? f.nome : 'Funcionário';
+}
+function login(){
+  let u=document.getElementById("loginUser").value.trim(),p=document.getElementById("loginPass").value.trim();
+  if(!u||!p) return alert("Informe usuário e senha.");
+  const adminUsuario=String((data.config&&data.config.adminUsuario)||"admin").trim().toLowerCase();
+  const adminSenhaAtual=String((data.config&&data.config.adminSenha)||"1234");
+  if(u.toLowerCase()===adminUsuario&&p===adminSenhaAtual){ role="ADM"; window.currentEmployeeId=null; }
+  else { const f=(data.funcionarios||[]).find(x=>String(x.usuario||"").trim().toLowerCase()===u.toLowerCase()&&String(x.senha||"")===p&&x.ativo); if(f){role="FUNC";window.currentEmployeeId=f.id}else return alert("Usuário ou senha inválidos."); }
+  document.getElementById("login").style.display="none";document.getElementById("app").style.display="block";
+  document.getElementById("profileName").textContent=role==="ADM"?"Hyagho Gomes":((data.funcionarios||[]).find(x=>x.id===window.currentEmployeeId)||{nome:"Funcionário"}).nome;
+  document.getElementById("profileRole").textContent=role==="ADM"?"Administrador":(getCurrentEmployee()?.cargo||"Funcionário");
+  const lf=getCurrentEmployee(); if(role==='ADM'){document.getElementById('avatar').textContent='HG';}else{const av=document.getElementById('avatar'); if(lf&&lf.imagem){av.innerHTML=`<img src="${lf.imagem}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;}else av.textContent=initials(lf?.nome||'F');}
+  render();
+}
+function logout(){role="";window.currentEmployeeId=null;document.getElementById("app").style.display="none";document.getElementById("login").style.display="grid";document.getElementById("loginUser").value="";document.getElementById("loginPass").value=""}
+
+function agendaInicioHTML(){
+  const eventos=Array.isArray(data.agenda)?data.agenda.slice():[];
+  eventos.sort((a,b)=>((a.data||"9999-99-99")+" "+(a.hora||"")).localeCompare((b.data||"9999-99-99")+" "+(b.hora||"")));
+  const proximos=eventos.slice(0,5);
+  return `
+    <div class="panel">
+      <div class="panel-head">
+        <h2>📅 Próximos compromissos</h2>
+        <button class="btn light" onclick="navigate('agenda')">VER AGENDA</button>
+      </div>
+      ${proximos.length?proximos.map((e,i)=>`
+        <div class="list-item" style="cursor:pointer" onclick="openEvent(${e.id})">
+          <div>
+            <b>${esc(e.nome)}</b>
+            <span class="muted">📅 ${formatEventDate(e.data)} · ⏰ ${esc(e.hora||"Sem horário")} · 👥 ${esc(e.pessoas||"0")} pessoas</span>
+          </div>
+          <span>${i===0?"🔴":i===1?"🟢":"🟠"}</span>
+        </div>`).join(""):`<p class="muted">Nenhum compromisso cadastrado na agenda.</p>`}
+    </div>`;
+}
+function navigate(tab){
+  if(!role){ return; }
+  document.querySelectorAll(".nav button[data-tab]").forEach(b=>b.classList.toggle("active", b.dataset.tab===tab));
+  const mobileMap={inicio:"inicio",compras:"compras",agenda:"agenda",avisos:"avisos"};
+  if(tab==="inicio"){ render(); updateMobileNav("inicio"); }
+  else if(tab==="compras"){ renderCompras(); updateMobileNav("compras"); }
+  else if(tab==="receitas"){ renderReceitas(); updateMobileNav("mais"); }
+  else if(tab==="agenda"){ renderAgenda(); updateMobileNav("agenda"); }
+  else if(tab==="avisos"){ renderAvisos(); updateMobileNav("avisos"); }
+  else if(tab==="funcionarios"){ renderFuncionarios(); updateMobileNav("mais"); }
+  else if(tab==="config"){ renderConfig(); updateMobileNav("mais"); }
+  document.querySelector(".sidebar")?.classList.remove("mobile-open");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+window.navigate=navigate;
+function render(){role==="ADM"?renderADM():renderFUNC(); updateMobileNav('inicio')}
+function countByStatus(){
+ const c=data.compras||[];
+ return {p:c.filter(x=>x.status==="Pendente").length,b:c.filter(x=>x.status==="Em compra").length,c:c.filter(x=>x.status==="Comprado").length,d:c.filter(x=>x.status==="Entregue").length,n:c.filter(x=>x.status==="Compra negada").length};
+}
+function initials(name){return String(name||'').split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase()||'F'}
+function quickHome(){return ``} function purchaseHomePanel(){
+ const s=countByStatus(), total=s.p+s.b+s.c+s.d+s.n, t=total||1;
+ const p=(s.p/t*100).toFixed(2)+'%', b=((s.p+s.b)/t*100).toFixed(2)+'%', c=((s.p+s.b+s.c)/t*100).toFixed(2)+'%', d=((s.p+s.b+s.c+s.d)/t*100).toFixed(2)+'%';
+ return `<div class="panel"><div class="panel-head"><h2>🛒 Solicitações de compra</h2><button class="btn light" onclick="navigate('compras')">VER TODAS →</button></div><div class="purchase-chart"><div class="donut-wrap"><div class="donut" style="--p:${p};--b:${b};--c:${c};--d:${d}"></div><div class="donut-center"><strong>${total}</strong><span class="muted">solicitações</span></div></div><div class="legend"><span><i style="background:#d83d3d"></i>${s.p} Pendentes</span><span><i style="background:#d99b28"></i>${s.b} Em compra</span><span><i style="background:#37a46a"></i>${s.c} Comprados</span><span><i style="background:#356fc3"></i>${s.d} Entregues</span><span><i style="background:#aeb5b1"></i>${s.n} Negados</span></div></div></div>`;
+}
+function eventsHomePanel(){
+ const eventos=Array.isArray(data.agenda)?data.agenda.slice():[]; eventos.sort((a,b)=>((a.data||'9999-99-99')+' '+(a.hora||'')).localeCompare((b.data||'9999-99-99')+' '+(b.hora||'')));
+ const proximos=eventos.slice(0,3);
+ return `<div class="panel"><div class="panel-head"><h2>📅 Próximos eventos</h2><button class="btn light" onclick="navigate('agenda')">VER TODOS →</button></div>${proximos.length?proximos.map(e=>{let dt=String(e.data||'').split('-');let date=dt.length===3?`${dt[2]}\n${dt[1]}`:String(e.data||'').slice(0,8);return `<div class="list-item" style="align-items:center;cursor:pointer" onclick="openEvent(${JSON.stringify(e.id)})"><div class="event-date">${esc(date).replace('\n','<br>')}</div><div style="flex:1"><b>${esc(e.nome)}</b><span class="muted">👥 ${esc(e.pessoas||'Toda a equipe')} · ⏰ ${esc(e.hora||'Sem horário')}</span></div><span>›</span></div>`}).join(''):'<p class="muted">Nenhum evento cadastrado.</p>'}</div>`;
+}
+function tasksHome(){
+ const s=countByStatus(); return `<div class="panel"><div class="panel-head"><h2>✅ Minhas tarefas de hoje</h2></div><div class="task-list"><div class="task"><span class="check">✓</span><span style="flex:1">Aprovar solicitações de compra</span>${s.p?`<span class="status rejected">${s.p}</span>`:''}</div><div class="task"><span class="check">✓</span><span style="flex:1">Conferir novos avisos</span><span class="muted">→</span></div><div class="task"><span class="check">✓</span><span style="flex:1">Verificar agenda</span><span class="muted">→</span></div><div class="task"><span class="check">✓</span><span style="flex:1">Revisar receitas</span><span class="muted">→</span></div></div></div>`;
+}
+function renderADM(){
+ const s=countByStatus(); const funcionarios=(data.funcionarios||[]).filter(f=>f.ativo); const avisos=(data.avisos||[]).slice(0,3);
+ document.getElementById('content').innerHTML=`<section class="hero"><div class="eyebrow">GESTÃO INTELIGENTE DA COZINHA</div><h1>Bom dia, Hyagho!</h1><p>Aqui é onde a organização se transforma em grandes pratos.</p></section>
+ <div class="stats"><div class="stat"><div class="ico">👥</div><div><b>${funcionarios.length}</b><small>Funcionários ativos</small></div></div><div class="stat"><div class="ico">🛒</div><div><b>${s.p}</b><small>Compras pendentes</small></div></div><div class="stat"><div class="ico">📅</div><div><b>${(data.agenda||[]).length}</b><small>Eventos na agenda</small></div></div><div class="stat"><div class="ico">📢</div><div><b>${avisos.length}</b><small>Avisos recentes</small></div></div></div>
+ ${quickHome()}
+ <div class="home-two">${purchaseHomePanel()}${eventsHomePanel()}</div>
+ <div class="grid2"><div class="panel"><div class="panel-head"><h2>👥 Equipe em destaque</h2><button class="btn light" onclick="navigate('funcionarios')">VER TODOS →</button></div><div class="list">${funcionarios.slice(0,4).map(f=>`<div class="employee-mini"><div class="employee-photo">${f.imagem?`<img src="${f.imagem}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:initials(f.nome)}</div><div style="flex:1"><b>${esc(f.nome)}</b><span class="muted">${esc(f.cargo)}</span></div><span class="badge-dot"></span></div>`).join('')||'<p class="muted">Nenhum funcionário ativo.</p>'}</div></div><div class="panel"><div class="panel-head"><h2>📢 Avisos recentes</h2><button class="btn light" onclick="navigate('avisos')">VER MURAL →</button></div>${avisos.map(a=>`<div class="list-item"><div><b>${esc(a.t)}</b><span class="muted">${esc(a.data||'')}</span></div><span>•</span></div>`).join('')||'<p class="muted">Nenhum aviso publicado.</p>'}</div></div>
+ <div class="grid2">${tasksHome()}<div class="quote-card"><p>“Grandes resultados são feitos de pequenas tarefas bem realizadas todos os dias.”</p></div></div>`;
+}
+function renderFUNC(){
+ const f=getCurrentEmployee(); if(!f){alert('Funcionário não encontrado.');logout();return;} let minhas=data.compras.filter(x=>String(x.usuarioId||'')===String(f.id)); if(!minhas.length&&f.usuario==='joao')minhas=data.compras.filter(x=>x.usuario==='João'); const ap=minhas.filter(x=>x.status==='Comprado'||x.status==='Entregue').length,pe=minhas.filter(x=>x.status==='Pendente'||x.status==='Em compra').length;
+ const eventos=Array.isArray(data.agenda)?data.agenda.slice(0,3):[];
+ document.getElementById('content').innerHTML=`<section class="hero"><div class="eyebrow">CANAL DA COZINHA</div><h1>Bom dia, ${esc(f.nome.split(' ')[0])}! 👋</h1><p>${esc(f.cargo)} · Tudo o que você precisa para o seu dia.</p></section><div class="stats"><div class="stat"><div class="ico">🛒</div><div><b>${minhas.length}</b><small>Minhas solicitações</small></div></div><div class="stat"><div class="ico">🟢</div><div><b>${ap}</b><small>Compradas / entregues</small></div></div><div class="stat"><div class="ico">⏳</div><div><b>${pe}</b><small>Aguardando ADM</small></div></div><div class="stat"><div class="ico">📖</div><div><b>${data.receitas.length}</b><small>Receitas disponíveis</small></div></div></div>${quickHome()}<div class="grid2"><div class="panel"><div class="panel-head"><h2>🛒 Nova solicitação</h2></div><div class="form-grid"><input id="p" class="field" placeholder="Produto"><input id="q" class="field" placeholder="Quantidade"><input id="o" class="field full" placeholder="Observação (opcional)"><button class="btn orange full" onclick="requestBuy()">ENVIAR AO ADM</button></div></div>${agendaInicioHTML()}</div><div class="grid2"><div class="panel"><div class="panel-head"><h2>🛒 Minhas solicitações</h2><button class="btn light" onclick="navigate('compras')">VER TODAS →</button></div>${minhas.slice(0,5).map(x=>`<div class="list-item"><div><b>${esc(x.produto)} — ${esc(x.qtd)} ${esc(x.unidade||'')}</b><span class="muted">${esc(x.obs||'Sem observação')} · ${esc(x.data)}</span></div><span class="status ${buyStatusClass(x.status)}">${esc(x.status)}</span></div>`).join('')||'<p class="muted">Você ainda não enviou solicitações.</p>'}</div><div class="panel"><div class="panel-head"><h2>📖 Caderno de receitas</h2><button class="btn light" onclick="navigate('receitas')">VER TODAS →</button></div>${data.receitas.slice(0,4).map(x=>`<div class="list-item"><div><b>${esc(x.nome)}</b><span class="muted">${esc(x.categoria)}</span></div><span>›</span></div>`).join('')}</div></div>`;
+}
+function toggleMobileMenu(){const sb=document.querySelector('.sidebar'); if(!sb)return; sb.classList.toggle('mobile-open')}
+function updateMobileNav(tab){document.querySelectorAll('[data-mobile-tab]').forEach(b=>b.classList.toggle('active',b.dataset.mobileTab===tab)); if(tab!=='mais')document.querySelector('.sidebar')?.classList.remove('mobile-open')}
+function requestBuy(){
+ const f=getCurrentEmployee(); if(!f){alert('Sessão do funcionário não encontrada.');return;}
+ let p=document.getElementById('p').value.trim(),q=document.getElementById('q').value.trim(),o=document.getElementById('o').value.trim();
+ if(!p||!q)return alert('Informe produto e quantidade.');
+ data.compras.unshift({id:Date.now(),produto:p,qtd:q,usuario:f.nome,usuarioId:f.id,obs:o,status:'Pendente',data:new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})});
+ save();alert('Solicitação enviada ao ADM!');render();
+}
+function abrirFotoMural(src){
+  let m=document.getElementById("fotoMuralModal");
+  if(!m){
+    m=document.createElement("div");
+    m.id="fotoMuralModal";
+    m.className="modal";
+    m.innerHTML=`<div class="modal-card" style="max-width:850px;text-align:center"><button class="recipe-close" style="float:right" onclick="document.getElementById('fotoMuralModal').remove()">×</button><img id="fotoMuralGrande" style="max-width:100%;max-height:75vh;object-fit:contain;border-radius:12px" alt="Foto do aviso"></div>`;
+    document.body.appendChild(m);
+    m.onclick=(e)=>{if(e.target===m)m.remove()};
+  }
+  document.getElementById("fotoMuralGrande").src=src;
+  m.classList.add("show");
+}
+
+function enviarObservacaoADM(){
+  const campo=document.getElementById("observacaoADM");
+  if(!campo)return;
+  const texto=campo.value.trim();
+  if(!texto){alert("Digite uma observação antes de enviar.");return;}
+  if(!Array.isArray(data.observacoesADM))data.observacoesADM=[];
+  data.observacoesADM.unshift({
+    id:Date.now(),
+    texto,
+    usuario:"João",
+    data:new Date().toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}),
+    lida:false
+  });
+  save();
+  campo.value="";
+  alert("Observação enviada ao ADM!");
+  renderAvisos();
+}
+
+function editarAviso(id){
+  const a=(data.avisos||[]).find(x=>String(x.id)===String(id));
+  if(!a)return;
+  document.getElementById("noticeTitle").value=a.t||"";
+  document.getElementById("noticeText").value=a.d||a.text||"";
+  document.getElementById("noticePhoto").value="";
+  document.getElementById("noticePreview").src=a.img||"";
+  document.getElementById("noticePreview").style.display=a.img?"block":"none";
+  const modal=document.getElementById("noticeModal");
+  modal.dataset.editId=String(id);
+  modal.classList.add("show");
+}
+
+function excluirAviso(id){
+  if(role!=="ADM"){ alert("Somente o ADM pode excluir avisos."); return false; }
+  const alvo=String(id ?? "");
+  if(!Array.isArray(data.avisos)) data.avisos=[];
+  const antes=data.avisos.length;
+  data.avisos=data.avisos.filter(a=>String(a.id)!==alvo);
+  if(data.avisos.length===antes){ alert("Aviso não encontrado."); return false; }
+  save();
+  renderAvisos();
+  return false;
+}
+
+function publicar(){const m=document.getElementById("noticeModal");delete m.dataset.editId;document.getElementById("noticeTitle").value="";document.getElementById("noticeText").value="";document.getElementById("noticePhoto").value="";document.getElementById("noticePreview").src="";document.getElementById("noticePreview").style.display="none";document.getElementById("noticeModal").classList.add("show");setTimeout(()=>document.getElementById("noticeTitle").focus(),50)}
+function closeNotice(){document.getElementById("noticeModal").classList.remove("show")}
+function previewNoticePhoto(event){const file=event.target.files[0];if(!file)return;if(file.size>4*1024*1024){alert("Escolha uma foto de até 4 MB.");event.target.value="";return}const reader=new FileReader();reader.onload=()=>{const img=document.getElementById("noticePreview");img.src=reader.result;img.style.display="block"};reader.readAsDataURL(file)}
+function confirmNotice(){
+  const t=document.getElementById("noticeTitle").value.trim();
+  const d=document.getElementById("noticeText").value.trim();
+  const file=document.getElementById("noticePhoto").files[0];
+  const modal=document.getElementById("noticeModal");
+  const editId=modal.dataset.editId;
+
+  if(!t||!d){alert("Preencha o título e a mensagem.");return}
+
+  const finish=(img)=>{
+    if(editId){
+      const a=(data.avisos||[]).find(x=>String(x.id)===String(editId));
+      if(!a)return;
+      a.t=t;
+      a.d=d;
+      if(img)a.img=img;
+      delete modal.dataset.editId;
+      save();
+      closeNotice();
+      renderAvisos();
+      alert("Aviso alterado com sucesso!");
+    }else{
+      if(!Array.isArray(data.avisos))data.avisos=[];
+      data.avisos.unshift({
+        id:Date.now(),
+        t,d,
+        data:new Date().toLocaleDateString("pt-BR"),
+        img:img||""
+      });
+      save();
+      closeNotice();
+      renderAvisos();
+      alert("Aviso publicado com sucesso!");
+    }
+  };
+
+  if(file){
+    if(file.size>4*1024*1024){alert("Escolha uma foto de até 4 MB.");return}
+    const reader=new FileReader();
+    reader.onload=()=>finish(reader.result);
+    reader.readAsDataURL(file);
+  }else{
+    const atual=editId ? ((data.avisos||[]).find(x=>String(x.id)===String(editId))||{}).img : "";
+    finish(atual||"");
+  }
+}
+
+function render(){role==="ADM"?renderADM():renderFUNC(); updateMobileNav('inicio')}
+function countByStatus(){
+ const c=data.compras||[];
+ return {p:c.filter(x=>x.status==="Pendente").length,b:c.filter(x=>x.status==="Em compra").length,c:c.filter(x=>x.status==="Comprado").length,d:c.filter(x=>x.status==="Entregue").length,n:c.filter(x=>x.status==="Compra negada").length};
+}
+function initials(name){return String(name||'').split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase()||'F'}
+function quickHome(){return `<div class="quick-grid">
+<button class="quick-btn" onclick="navigate('funcionarios')"><span>👥</span>Equipe<small>Funcionários</small></button>
+<button class="quick-btn" onclick="navigate('compras')"><span>🛒</span>Compras<small>Solicitações</small></button>
+<button class="quick-btn" onclick="navigate('agenda')"><span>📅</span>Agenda<small>Compromissos</small></button>
+<button class="quick-btn" onclick="navigate('avisos')"><span>📢</span>Mural<small>Avisos</small></button>
+<button class="quick-btn" onclick="navigate('receitas')"><span>📖</span>Receitas<small>Caderno</small></button>
+<button class="quick-btn" onclick="navigate('config')"><span>⚙️</span>Config.<small>Sistema</small></button>
+</div>`}
+function purchaseHomePanel(){
+ const s=countByStatus(), total=s.p+s.b+s.c+s.d+s.n, t=total||1;
+ const p=(s.p/t*100).toFixed(2)+'%', b=((s.p+s.b)/t*100).toFixed(2)+'%', c=((s.p+s.b+s.c)/t*100).toFixed(2)+'%', d=((s.p+s.b+s.c+s.d)/t*100).toFixed(2)+'%';
+ return `<div class="panel"><div class="panel-head"><h2>🛒 Solicitações de compra</h2><button class="btn light" onclick="navigate('compras')">VER TODAS →</button></div><div class="purchase-chart"><div class="donut-wrap"><div class="donut" style="--p:${p};--b:${b};--c:${c};--d:${d}"></div><div class="donut-center"><strong>${total}</strong><span class="muted">solicitações</span></div></div><div class="legend"><span><i style="background:#d83d3d"></i>${s.p} Pendentes</span><span><i style="background:#d99b28"></i>${s.b} Em compra</span><span><i style="background:#37a46a"></i>${s.c} Comprados</span><span><i style="background:#356fc3"></i>${s.d} Entregues</span><span><i style="background:#aeb5b1"></i>${s.n} Negados</span></div></div></div>`;
+}
+function eventsHomePanel(){
+ const eventos=Array.isArray(data.agenda)?data.agenda.slice():[]; eventos.sort((a,b)=>((a.data||'9999-99-99')+' '+(a.hora||'')).localeCompare((b.data||'9999-99-99')+' '+(b.hora||'')));
+ const proximos=eventos.slice(0,3);
+ return `<div class="panel"><div class="panel-head"><h2>📅 Próximos eventos</h2><button class="btn light" onclick="navigate('agenda')">VER TODOS →</button></div>${proximos.length?proximos.map(e=>{let dt=String(e.data||'').split('-');let date=dt.length===3?`${dt[2]}\n${dt[1]}`:String(e.data||'').slice(0,8);return `<div class="list-item" style="align-items:center;cursor:pointer" onclick="openEvent(${JSON.stringify(e.id)})"><div class="event-date">${esc(date).replace('\n','<br>')}</div><div style="flex:1"><b>${esc(e.nome)}</b><span class="muted">👥 ${esc(e.pessoas||'Toda a equipe')} · ⏰ ${esc(e.hora||'Sem horário')}</span></div><span>›</span></div>`}).join(''):'<p class="muted">Nenhum evento cadastrado.</p>'}</div>`;
+}
+function tasksHome(){
+ const s=countByStatus(); return `<div class="panel"><div class="panel-head"><h2>✅ Minhas tarefas de hoje</h2></div><div class="task-list"><div class="task"><span class="check">✓</span><span style="flex:1">Aprovar solicitações de compra</span>${s.p?`<span class="status rejected">${s.p}</span>`:''}</div><div class="task"><span class="check">✓</span><span style="flex:1">Conferir novos avisos</span><span class="muted">→</span></div><div class="task"><span class="check">✓</span><span style="flex:1">Verificar agenda</span><span class="muted">→</span></div><div class="task"><span class="check">✓</span><span style="flex:1">Revisar receitas</span><span class="muted">→</span></div></div></div>`;
+}
+function renderADM(){
+ const s=countByStatus(); const funcionarios=(data.funcionarios||[]).filter(f=>f.ativo); const avisos=(data.avisos||[]).slice(0,3);
+ document.getElementById('content').innerHTML=`<section class="hero"><div class="eyebrow">GESTÃO INTELIGENTE DA COZINHA</div><h1>Bom dia, Hyagho!</h1><p>Aqui é onde a organização se transforma em grandes pratos.</p></section>
+ <div class="stats"><div class="stat"><div class="ico">👥</div><div><b>${funcionarios.length}</b><small>Funcionários ativos</small></div></div><div class="stat"><div class="ico">🛒</div><div><b>${s.p}</b><small>Compras pendentes</small></div></div><div class="stat"><div class="ico">📅</div><div><b>${(data.agenda||[]).length}</b><small>Eventos na agenda</small></div></div><div class="stat"><div class="ico">📢</div><div><b>${avisos.length}</b><small>Avisos recentes</small></div></div></div>
+ ${quickHome()}
+ <div class="home-two">${purchaseHomePanel()}${eventsHomePanel()}</div>
+ <div class="grid2"><div class="panel"><div class="panel-head"><h2>👥 Equipe em destaque</h2><button class="btn light" onclick="navigate('funcionarios')">VER TODOS →</button></div><div class="list">${funcionarios.slice(0,4).map(f=>`<div class="employee-mini"><div class="employee-photo">${f.imagem?`<img src="${f.imagem}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:initials(f.nome)}</div><div style="flex:1"><b>${esc(f.nome)}</b><span class="muted">${esc(f.cargo)}</span></div><span class="badge-dot"></span></div>`).join('')||'<p class="muted">Nenhum funcionário ativo.</p>'}</div></div><div class="panel"><div class="panel-head"><h2>📢 Avisos recentes</h2><button class="btn light" onclick="navigate('avisos')">VER MURAL →</button></div>${avisos.map(a=>`<div class="list-item"><div><b>${esc(a.t)}</b><span class="muted">${esc(a.data||'')}</span></div><span>•</span></div>`).join('')||'<p class="muted">Nenhum aviso publicado.</p>'}</div></div>
+ <div class="grid2">${tasksHome()}<div class="quote-card"><p>“Grandes resultados são feitos de pequenas tarefas bem realizadas todos os dias.”</p></div></div>`;
+}
+function renderFUNC(){
+ const f=getCurrentEmployee(); if(!f){alert('Funcionário não encontrado.');logout();return;} let minhas=data.compras.filter(x=>String(x.usuarioId||'')===String(f.id)); if(!minhas.length&&f.usuario==='joao')minhas=data.compras.filter(x=>x.usuario==='João'); const ap=minhas.filter(x=>x.status==='Comprado'||x.status==='Entregue').length,pe=minhas.filter(x=>x.status==='Pendente'||x.status==='Em compra').length;
+ const eventos=Array.isArray(data.agenda)?data.agenda.slice(0,3):[];
+ document.getElementById('content').innerHTML=`<section class="hero"><div class="eyebrow">CANAL DA COZINHA</div><h1>Bom dia, ${esc(f.nome.split(' ')[0])}! 👋</h1><p>${esc(f.cargo)} · Tudo o que você precisa para o seu dia.</p></section><div class="stats"><div class="stat"><div class="ico">🛒</div><div><b>${minhas.length}</b><small>Minhas solicitações</small></div></div><div class="stat"><div class="ico">🟢</div><div><b>${ap}</b><small>Compradas / entregues</small></div></div><div class="stat"><div class="ico">⏳</div><div><b>${pe}</b><small>Aguardando ADM</small></div></div><div class="stat"><div class="ico">📖</div><div><b>${data.receitas.length}</b><small>Receitas disponíveis</small></div></div></div>${quickHome()}<div class="grid2"><div class="panel"><div class="panel-head"><h2>🛒 Nova solicitação</h2></div><div class="form-grid"><input id="p" class="field" placeholder="Produto"><input id="q" class="field" placeholder="Quantidade"><input id="o" class="field full" placeholder="Observação (opcional)"><button class="btn orange full" onclick="requestBuy()">ENVIAR AO ADM</button></div></div>${agendaInicioHTML()}</div><div class="grid2"><div class="panel"><div class="panel-head"><h2>🛒 Minhas solicitações</h2><button class="btn light" onclick="navigate('compras')">VER TODAS →</button></div>${minhas.slice(0,5).map(x=>`<div class="list-item"><div><b>${esc(x.produto)} — ${esc(x.qtd)} ${esc(x.unidade||'')}</b><span class="muted">${esc(x.obs||'Sem observação')} · ${esc(x.data)}</span></div><span class="status ${buyStatusClass(x.status)}">${esc(x.status)}</span></div>`).join('')||'<p class="muted">Você ainda não enviou solicitações.</p>'}</div><div class="panel"><div class="panel-head"><h2>📖 Caderno de receitas</h2><button class="btn light" onclick="navigate('receitas')">VER TODAS →</button></div>${data.receitas.slice(0,4).map(x=>`<div class="list-item"><div><b>${esc(x.nome)}</b><span class="muted">${esc(x.categoria)}</span></div><span>›</span></div>`).join('')}</div></div>`;
+}
+function toggleMobileMenu(){const sb=document.querySelector('.sidebar'); if(!sb)return; sb.classList.toggle('mobile-open')}
+function updateMobileNav(tab){document.querySelectorAll('[data-mobile-tab]').forEach(b=>b.classList.toggle('active',b.dataset.mobileTab===tab)); if(tab!=='mais')document.querySelector('.sidebar')?.classList.remove('mobile-open')}
+
+function shell(title,sub,body){document.getElementById('content').innerHTML=`<div class="hero"><div class="eyebrow">COZINHA CONNECT</div><h1>${title}</h1><p>${sub}</p></div>${body}`}
+function statusCompraInfo(status){
+ const map={
+  'Pendente':['pending','🟡 PENDENTE'],
+  'Em compra':['approved','🔵 EM COMPRA'],
+  'Comprado':['approved','🟢 COMPRADO'],
+  'Entregue':['approved','📦 ENTREGUE'],
+  'Compra negada':['rejected','🔴 COMPRA NEGADA']
+ };
+ return map[status]||map['Pendente'];
+}
+function statusCompraSelect(x){
+ const opts=['Pendente','Em compra','Comprado','Entregue','Compra negada'];
+ return `<select class="field" style="min-width:145px" onchange="alterarStatusCompra(${JSON.stringify(String(x.id))},this.value)">${opts.map(o=>`<option value="${esc(o)}" ${x.status===o?'selected':''}>${statusCompraInfo(o)[1]}</option>`).join('')}</select>`;
+}
+function renderCompraCard(x, funcionarioView=false){
+ const si=statusCompraInfo(x.status);
+ return `<div class="list-item"><div><b>${esc(x.produto)} — ${esc(x.qtd)} ${esc(x.unidade||'')}</b><span class="muted">${esc(x.obs||'Sem observação')} · ${esc(x.data)}</span>${x.status==='Compra negada'&&x.motivoNegativa?`<span class="muted" style="display:block;margin-top:5px;color:#983737"><b>Motivo:</b> ${esc(x.motivoNegativa)}</span>`:''}</div><span class="status ${si[0]}">${si[1]}</span></div>`;
+}
+function buyStatusClass(status){return status==='Em compra'?'buying':status==='Comprado'?'bought':status==='Entregue'?'delivered':status==='Compra negada'?'rejected':'pending'}
+function changeBuyStatus(id,status){
+  const x=data.compras.find(c=>String(c.id)===String(id));
+  if(!x)return;
+  if(role!=="ADM")return alert("Somente o ADM pode alterar o status da compra.");
+  if(status==='Compra negada'){
+    const motivo=prompt('Informe o motivo da compra negada:');
+    if(motivo===null){renderCompras();return;}
+    x.motivoNegacao=motivo.trim()||'Não informado';
+  }else x.motivoNegacao='';
+  x.status=status; save(); renderCompras();
+}
+function advancePurchase(id){
+  const x=data.compras.find(c=>String(c.id)===String(id)); if(!x)return;
+  const next={"Pendente":"Em compra","Em compra":"Comprado","Comprado":"Entregue","Entregue":"Entregue","Compra negada":"Compra negada"}[x.status]||"Em compra";
+  changeBuyStatus(id,next);
+}
+function denyPurchase(id){changeBuyStatus(id,'Compra negada')}
+function deletePurchase(id){
+  if(role!=="ADM")return alert("Somente o ADM pode excluir solicitações.");
+  const antes=data.compras.length; data.compras=data.compras.filter(c=>String(c.id)!==String(id));
+  if(data.compras.length!==antes){save();renderCompras();}
+}
+function buildConsolidatedPurchaseList(){
+  const approved=(data.compras||[]).filter(x=>x.status!=='Pendente' && x.status!=='Compra negada');
+  const map={};
+  approved.forEach(x=>{
+    const produto=String(x.produto||'').trim();
+    const unidade=String(x.unidade||'un').trim();
+    const key=(produto.toLowerCase()+'||'+unidade.toLowerCase());
+    const qtd=parseFloat(String(x.qtd||'0').replace(',','.'))||0;
+    if(!map[key]) map[key]={produto,unidade,qtd:0};
+    map[key].qtd+=qtd;
+  });
+  return Object.values(map).sort((a,b)=>a.produto.localeCompare(b.produto,'pt-BR'));
+}
+function fmtQtd(q){
+  return Number.isInteger(q)?String(q):q.toLocaleString('pt-BR',{maximumFractionDigits:3});
+}
+function imprimirListaCompras(){
+  const lista=buildConsolidatedPurchaseList();
+  if(!lista.length){alert('Não há produtos aprovados para a lista do comprador.');return;}
+  const area=document.getElementById('printPurchaseList');
+  if(area) area.scrollIntoView({behavior:'smooth',block:'start'});
+  setTimeout(()=>window.print(),150);
+}
+function aprovarCompra(id){
+  if(role!=='ADM'){alert('Somente o ADM pode aprovar compras.');return;}
+  changeBuyStatus(id,'Em compra');
+}
+function renderCompras(){
+ if(role==='ADM'){
+  const lista=buildConsolidatedPurchaseList();
+  shell('Compras','Aprove as requisições e gere a lista consolidada para o comprador.',`
+    <div class="panel">
+      <div class="panel-head"><h2>🛒 Requisições dos funcionários</h2><span class="muted">Hoje</span></div>
+      <p class="approve-note">Somente pedidos <b>APROVADOS</b> entram na lista do comprador. Aprovar coloca o pedido em <b>EM COMPRA</b>.</p>
+      <div style="overflow:auto"><table class="table"><tr><th>Produto</th><th>Qtd.</th><th>Solicitante</th><th>Status</th><th>Ações</th></tr>
+      ${data.compras.map(x=>`<tr>
+        <td><b>${esc(x.produto)}</b><br><span class="muted">${esc(x.obs||'')}</span></td>
+        <td>${esc(x.qtd)} ${esc(x.unidade||'')}</td>
+        <td>${esc(x.usuario||'')}</td>
+        <td><select class="status-select js-buy-status" data-buy-id="${esc(String(x.id))}">
+          <option value="Pendente" ${x.status==='Pendente'?'selected':''}>🟡 Pendente</option>
+          <option value="Em compra" ${x.status==='Em compra'?'selected':''}>🔵 Em compra</option>
+          <option value="Comprado" ${x.status==='Comprado'?'selected':''}>🟢 Comprado</option>
+          <option value="Entregue" ${x.status==='Entregue'?'selected':''}>📦 Entregue</option>
+          <option value="Compra negada" ${x.status==='Compra negada'?'selected':''}>🔴 Compra negada</option>
+        </select>${x.status==='Compra negada'&&x.motivoNegacao?`<span class="rejection-reason">Motivo: ${esc(x.motivoNegacao)}</span>`:''}</td>
+        <td>
+          ${x.status==='Pendente'?`<button type="button" class="btn js-buy-action" data-buy-action="approve" data-buy-id="${esc(String(x.id))}" title="Aprovar compra">✓ APROVAR</button>`:`<button type="button" class="btn light js-buy-action" data-buy-action="advance" data-buy-id="${esc(String(x.id))}" title="Avançar status">AVANÇAR</button>`}
+          <button type="button" class="btn red js-buy-action" data-buy-action="deny" data-buy-id="${esc(String(x.id))}" title="Negar compra">NEGAR</button>
+          <button type="button" class="btn light js-buy-action" data-buy-action="delete" data-buy-id="${esc(String(x.id))}" title="Excluir">🗑️</button>
+        </td>
+      </tr>`).join('')}</table></div>
+    </div>
+    <div class="panel" id="printPurchaseList">
+      <div class="panel-head">
+        <div><h2>🧾 Lista do comprador</h2><span class="muted">Produtos aprovados • ${new Date().toLocaleDateString('pt-BR')}</span></div>
+        <button type="button" class="btn orange no-print" onclick="imprimirListaCompras()">🖨️ IMPRIMIR LISTA</button>
+      </div>
+      ${lista.length?`<div class="print-list-box">
+        <div class="print-list-head"><span></span><span>PRODUTO</span><span>QUANTIDADE</span><span>UNIDADE</span></div>
+        ${lista.map((x,i)=>`<div class="print-list-row"><span class="print-check">☐</span><b>${esc(x.produto)}</b><strong>${fmtQtd(x.qtd)}</strong><span>${esc(x.unidade)}</span></div>`).join('')}
+      </div>`:'<p class="muted">Nenhum produto aprovado ainda. Aprove as requisições acima para montar a lista.</p>'}
+    </div>`);
+ }else{
+  let f=getCurrentEmployee(); let minhas=data.compras.filter(x=>f && String(x.usuarioId||'')===String(f.id)); if(f && !minhas.length && f.usuario==='joao') minhas=data.compras.filter(x=>x.usuario==='João');
+  shell('Compras','Envie uma solicitação para o ADM.',`<div class="grid2"><div class="panel"><h2>🛒 Nova solicitação</h2><div class="form-grid"><input id="np" class="field" placeholder="Produto"><input id="nq" class="field" type="number" step="any" min="0" placeholder="Quantidade"><select id="nu" class="field"><option value="">Unidade</option><option value="kg">kg — Quilograma</option><option value="g">g — Grama</option><option value="mg">mg — Miligrama</option><option value="L">L — Litro</option><option value="ml">ml — Mililitro</option><option value="un">un — Unidade</option></select><input id="no" class="field full" placeholder="Observação (opcional)"><button class="btn orange full" onclick="requestBuyFromTab()">ENVIAR AO ADM</button></div></div><div class="panel"><h2>📋 Minhas solicitações</h2>${minhas.map(x=>`<div class="list-item"><div><b>${esc(x.produto)} — ${esc(x.qtd)} ${esc(x.unidade||'')}</b><span class="muted">${esc(x.obs||'Sem observação')} · ${esc(x.data||'')}</span></div><span class="status ${buyStatusClass(x.status)}">${esc(x.status)}</span>${x.status==='Compra negada'&&x.motivoNegacao?`<div class="rejection-reason">Motivo: ${esc(x.motivoNegacao)}</div>`:''}</div>`).join('')||'<p class="muted">Nenhuma solicitação.</p>'}</div></div>`)
+ }
+}
+function requestBuyFromTab(){const f=getCurrentEmployee();if(!f)return alert('Sessão do funcionário não encontrada.');let p=document.getElementById('np').value.trim(),q=document.getElementById('nq').value.trim(),u=document.getElementById('nu').value,o=document.getElementById('no').value.trim();if(!p||!q||!u)return alert('Informe produto, quantidade e unidade.');data.compras.unshift({id:Date.now(),produto:p,qtd:q,unidade:u,usuario:f.nome,usuarioId:f.id,obs:o,status:'Pendente',motivoNegativa:'',data:new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})});save();navigate('compras');alert('Solicitação enviada ao ADM!')}
+function alterarStatusCompra(id,status){
+ const x=data.compras.find(c=>String(c.id)===String(id));
+ if(!x||role!=='ADM')return;
+ if(status==='Compra negada'){
+  const motivo=prompt('Informe o motivo da compra negada:');
+  if(motivo===null)return renderCompras();
+  x.motivoNegativa=motivo.trim()||'Não informado.';
+ }else{x.motivoNegativa='';}
+ x.status=status;save();renderCompras();
+}
+
+function ingredientRows(items=[]){
+  if(!items.length) items=[{nome:"",qtd:"",un:""}];
+  return items.map((x,i)=>`<div class="ingredient-row">
+    <input class="field ing-name" value="${esc(x.nome||"")}" placeholder="Ingrediente">
+    <input class="field ing-qty" type="number" step="any" min="0" value="${x.qtd??""}" placeholder="Qtd.">
+    <select class="field ing-unit">
+  <option value="">Un.</option>
+  <option value="kg" ${x.un==="kg"?"selected":""}>kg — Quilograma</option>
+  <option value="g" ${x.un==="g"?"selected":""}>g — Grama</option>
+  <option value="mg" ${x.un==="mg"?"selected":""}>mg — Miligrama</option>
+  <option value="L" ${x.un==="L"?"selected":""}>L — Litro</option>
+  <option value="ml" ${x.un==="ml"?"selected":""}>ml — Mililitro</option>
+  <option value="un" ${x.un==="un"?"selected":""}>un — Unidade</option>
+</select>
+    <button type="button" class="btn red" onclick="this.parentElement.remove()">×</button>
+  </div>`).join("");
+}
+function collectIngredients(){
+  return [...document.querySelectorAll(".ingredient-row")].map(row=>({
+    nome:row.querySelector(".ing-name").value.trim(),
+    qtd:parseFloat(row.querySelector(".ing-qty").value),
+    un:row.querySelector(".ing-unit").value.trim()
+  })).filter(x=>x.nome && Number.isFinite(x.qtd) && x.qtd>0);
+}
+function addIngredientRow(containerId){
+  const c=document.getElementById(containerId);
+  const d=document.createElement("div");
+  d.className="ingredient-row";
+  d.innerHTML=`<input class="field ing-name" placeholder="Ingrediente"><input class="field ing-qty" type="number" step="any" min="0" placeholder="Qtd."><select class="field ing-unit">
+  <option value="">Un.</option>
+  <option value="kg">kg — Quilograma</option>
+  <option value="g">g — Grama</option>
+  <option value="mg">mg — Miligrama</option>
+  <option value="L">L — Litro</option>
+  <option value="ml">ml — Mililitro</option>
+  <option value="un">un — Unidade</option>
+</select>
+<button type="button" class="btn red" onclick="this.parentElement.remove()">×</button>`;
+  c.appendChild(d);
+}
+function openProportion(id){
+  const r=data.receitas.find(x=>x.id===id);
+  if(!r)return;
+  const ings=(r.ingredientes||[]).filter(x=>x.nome && Number.isFinite(Number(x.qtd)));
+
+  shell("Produção proporcional","Adapte a receita somente para a quantidade de insumo disponível.",`
+    <div class="recipe-detail">
+      ${r.img?`<img class="recipe-detail-photo" src="${r.img}" alt="${esc(r.nome)}">`:""}
+      <div class="recipe-detail-body">
+        <span class="recipe-tag">${esc(r.categoria||"Receita")}</span>
+        <h2>${esc(r.nome)}</h2>
+
+        <div class="calc-box">
+          <h3 style="margin-top:0">⚖️ Ajustar receita ao estoque disponível</h3>
+          <p class="muted">Escolha um ingrediente como referência e informe quanto você tem. A receita original não será alterada.</p>
+
+          ${ings.length?`
+          <div class="calc-grid">
+            <div>
+              <label class="muted">1. Qual ingrediente você tem?</label>
+              <select id="calcIngredient" class="field">
+                ${ings.map((x,i)=>`<option value="${i}">${esc(x.nome)} — ${formatQty(Number(x.qtd))} ${esc(x.un)}</option>`).join("")}
+              </select>
+            </div>
+            <div>
+              <label class="muted">2. Quanto você tem disponível?</label>
+              <input id="calcAvailable" class="field" type="number" step="any" min="0" placeholder="Ex.: 6">
+            </div>
+          </div>
+
+          <button class="btn orange" style="margin-top:12px" onclick="calcularReceitaProporcional(${id})">CALCULAR RECEITA</button>
+          <div id="calcResult"></div>
+          `:`
+          <p class="muted">Esta receita ainda não possui ingredientes com quantidades cadastradas.</p>
+          `}
+        </div>
+
+        <div class="recipe-actions">
+          <button class="btn light" onclick="openRecipe(${id})">← VOLTAR À RECEITA</button>
+        </div>
+      </div>
+    </div>`);
+}
+
+function calcularReceitaProporcional(id){
+  const r=data.receitas.find(x=>x.id===id);
+  if(!r)return;
+
+  const ings=(r.ingredientes||[]).filter(x=>x.nome && Number.isFinite(Number(x.qtd)));
+  const idx=Number(document.getElementById("calcIngredient").value);
+  const available=parseFloat(document.getElementById("calcAvailable").value);
+  const base=ings[idx];
+
+  if(!base || !Number.isFinite(available) || available<=0){
+    alert("Informe uma quantidade disponível válida.");
+    return;
+  }
+
+  const fator=available/Number(base.qtd);
+
+  document.getElementById("calcResult").innerHTML=`
+    <div style="margin-top:18px">
+      <h3>🍳 Receita ajustada</h3>
+      <p class="muted">Base usada: <b>${esc(base.nome)}</b> — você tem <b>${formatQty(available)} ${esc(base.un)}</b>.</p>
+
+      <table class="result-table">
+        <thead>
+          <tr>
+            <th>Ingrediente</th>
+            <th>Original</th>
+            <th>Para produzir</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${ings.map(x=>`
+            <tr>
+              <td>${esc(x.nome)}</td>
+              <td>${formatQty(Number(x.qtd))} ${esc(x.un)}</td>
+              <td><b>${formatQty(Number(x.qtd)*fator)} ${esc(x.un)}</b></td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+
+      <p class="muted" style="margin-bottom:0">
+        A receita original permanece salva sem nenhuma alteração.
+      </p>
+    </div>`;
+}
+
+function formatQty(n){
+  if(Math.abs(n-Math.round(n))<1e-9)return String(Math.round(n));
+  return n.toFixed(3).replace(/0+$/,"").replace(/\.$/,"");
+}
+function renderReceitas(){
+  const canEdit=role==="ADM";
+  shell("Caderno de Receitas","Receitas organizadas para a equipe.",`
+    ${canEdit?`
+    <div class="panel" style="margin-bottom:18px">
+      <div class="panel-head">
+        <h2>📖 Caderno de Receitas</h2>
+        <span class="muted">ADM</span>
+      </div>
+      <button class="btn orange" onclick="openAddRecipe()">➕ ADICIONAR RECEITA</button>
+    </div>
+
+    <div id="recipeAddModal" class="recipe-add-modal" onclick="if(event.target===this)closeAddRecipe()">
+      <div class="recipe-add-card">
+        <div class="recipe-add-head">
+          <h2>➕ Adicionar nova receita</h2>
+          <button class="recipe-close" onclick="closeAddRecipe()" title="Fechar">×</button>
+        </div>
+
+        <div class="form-grid">
+          <input id="recipeName" class="field" placeholder="Nome da receita">
+          <input id="recipeCategory" class="field" placeholder="Categoria">
+          <textarea id="recipeDesc" class="field full" rows="4" placeholder="Modo de preparo e observações"></textarea>
+
+          <div class="ingredient-box full">
+            <div class="panel-head">
+              <h3 style="margin:0">🥕 Ingredientes e quantidades</h3>
+            </div>
+            <div id="newIngredients">${ingredientRows()}</div>
+            <button type="button" class="btn light" onclick="addIngredientRow('newIngredients')">+ ADICIONAR INGREDIENTE</button>
+          </div>
+
+          <label class="photo-label full" for="recipePhoto">📷 ESCOLHER FOTO DA RECEITA</label>
+          <input id="recipePhoto" type="file" accept="image/*" style="display:none" onchange="previewRecipe(event)">
+          <img id="recipePreview" class="recipe-preview full" alt="Prévia da receita">
+
+          <div class="recipe-actions full">
+            <button class="btn light" onclick="closeAddRecipe()">CANCELAR</button>
+            <button class="btn orange" onclick="addRecipe()">💾 SALVAR RECEITA</button>
+          </div>
+        </div>
+      </div>
+    </div>`:""}
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>📖 Receitas cadastradas</h2>
+        <span class="muted">${data.receitas.length} receitas</span>
+      </div>
+      <div class="recipe-grid">
+        ${data.receitas.map(r=>`
+          <div class="recipe-card clickable" onclick="openRecipe(${r.id})">
+            ${r.img?`<img class="recipe-photo" src="${r.img}" alt="${esc(r.nome)}">`:`<div class="recipe-empty">📖</div>`}
+            <div class="recipe-body">
+              <span class="recipe-tag">${esc(r.categoria||"Receita")}</span>
+              <h3>${esc(r.nome)}</h3>
+              <p class="muted">Clique para abrir a receita</p>
+            </div>
+          </div>`).join("")}
+      </div>
+    </div>`);
+}
+
+function openAddRecipe(){
+  const modal=document.getElementById("recipeAddModal");
+  if(!modal)return;
+  modal.classList.add("show");
+  setTimeout(()=>document.getElementById("recipeName")?.focus(),50);
+}
+
+function closeAddRecipe(){
+  document.getElementById("recipeAddModal")?.classList.remove("show");
+}
+
+function openRecipe(id){
+  const r=data.receitas.find(x=>x.id===id);
+  if(!r)return;
+  const canEdit=role==="ADM";
+  shell("Receita","Caderno de receitas da cozinha.",`
+    <div class="recipe-detail">
+      ${r.img?`<img class="recipe-detail-photo" src="${r.img}" alt="${esc(r.nome)}">`:`<div class="recipe-empty" style="height:150px;font-size:42px">📖</div>`}
+      <div class="recipe-detail-body">
+        <span class="recipe-tag">${esc(r.categoria||"Receita")}</span>
+        <h2>${esc(r.nome)}</h2>
+        <p class="muted" style="white-space:pre-wrap;line-height:1.7">${esc(r.descricao||"Nenhuma descrição cadastrada.")}</p>
+
+        ${(r.ingredientes||[]).length?`
+        <div class="ingredient-box">
+          <h3 style="margin-top:0">🥕 Ingredientes</h3>
+          ${r.ingredientes.map(x=>`
+            <div class="list-item">
+              <b>${esc(x.nome)}</b>
+              <span>${formatQty(Number(x.qtd))} ${esc(x.un)}</span>
+            </div>`).join("")}
+        </div>`:""}
+
+        <div class="recipe-actions">
+          <button class="btn light" onclick="openProportion(${r.id})">⚖️ REGRA DE TRÊS</button>
+          ${canEdit?`
+            <button class="btn orange" onclick="editRecipe(${r.id})">✏️ EDITAR RECEITA</button>
+            <button class="btn red" onclick="deleteRecipe(${r.id})">🗑️ EXCLUIR RECEITA</button>
+          `:""}
+          <button class="btn light" onclick="renderReceitas()">← VOLTAR</button>
+        </div>
+      </div>
+    </div>`);
+}
+
+function editRecipe(id){
+  const r=data.receitas.find(x=>x.id===id);
+  if(!r)return;
+  shell("Editar Receita","Altere os dados e salve novamente.",`
+    <div class="recipe-form">
+      <div class="form-grid">
+        <input id="editRecipeName" class="field" value="${esc(r.nome)}" placeholder="Nome da receita">
+        <input id="editRecipeCategory" class="field" value="${esc(r.categoria||"")}" placeholder="Categoria">
+        <textarea id="editRecipeDesc" class="field full" rows="5" placeholder="Ingredientes, modo de preparo ou observações">${esc(r.descricao||"")}</textarea>
+        <div class="ingredient-box full">
+          <div class="panel-head"><h3 style="margin:0">🥕 Ingredientes e quantidades</h3></div>
+          <div id="editIngredients">${ingredientRows(r.ingredientes||[])}</div>
+          <button type="button" class="btn light" onclick="addIngredientRow('editIngredients')">+ ADICIONAR INGREDIENTE</button>
+        </div>
+        <label class="photo-label full" for="editRecipePhoto">📷 TROCAR FOTO DA RECEITA</label>
+        <input id="editRecipePhoto" type="file" accept="image/*" style="display:none" onchange="previewEditRecipe(event)">
+        <img id="editRecipePreview" class="recipe-preview full" src="${r.img||""}" style="${r.img?"display:block":""}" alt="Prévia da receita">
+        <button class="btn orange full" onclick="saveRecipeEdit(${r.id})">💾 SALVAR ALTERAÇÕES</button>
+        <button class="btn light full" onclick="openRecipe(${r.id})">CANCELAR</button>
+      </div>
+    </div>`);
+}
+
+function previewEditRecipe(event){
+  const file=event.target.files[0];
+  if(!file)return;
+  if(file.size>4*1024*1024){
+    alert("A foto deve ter no máximo 4 MB.");
+    event.target.value="";
+    return;
+  }
+  const reader=new FileReader();
+  reader.onload=()=>{
+    const img=document.getElementById("editRecipePreview");
+    img.src=reader.result;
+    img.style.display="block";
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveRecipeEdit(id){
+  const r=data.receitas.find(x=>x.id===id);
+  if(!r)return;
+  const nome=document.getElementById("editRecipeName").value.trim();
+  const categoria=document.getElementById("editRecipeCategory").value.trim();
+  const descricao=document.getElementById("editRecipeDesc").value.trim();
+  const ingredientes=collectIngredients();
+  const file=document.getElementById("editRecipePhoto").files[0];
+  if(!nome){alert("Informe o nome da receita.");return;}
+  const finish=(img)=>{
+    r.nome=nome;
+    r.categoria=categoria||"Receita";
+    r.descricao=descricao;
+    r.ingredientes=ingredientes;
+    if(img!==null)r.img=img;
+    save();
+    openRecipe(id);
+    alert("Receita alterada com sucesso!");
+  };
+  if(file){
+    const reader=new FileReader();
+    reader.onload=()=>finish(reader.result);
+    reader.readAsDataURL(file);
+  }else{
+    finish(null);
+  }
+}
+
+function previewRecipe(event){
+  const file=event.target.files[0];
+  if(!file)return;
+  if(file.size>4*1024*1024){
+    alert("A foto deve ter no máximo 4 MB.");
+    event.target.value="";
+    return;
+  }
+  const reader=new FileReader();
+  reader.onload=()=>{
+    const img=document.getElementById("recipePreview");
+    img.src=reader.result;
+    img.style.display="block";
+  };
+  reader.readAsDataURL(file);
+}
+function addRecipe(){
+  const nome=document.getElementById("recipeName").value.trim();
+  const categoria=document.getElementById("recipeCategory").value.trim();
+  const descricao=document.getElementById("recipeDesc").value.trim();
+  const ingredientes=collectIngredients();
+  const file=document.getElementById("recipePhoto").files[0];
+  if(!nome){alert("Informe o nome da receita.");return;}
+  const finish=(img="")=>{
+    data.receitas.unshift({id:Date.now(),nome,categoria:categoria||"Receita",descricao,img,ingredientes});
+    save();
+    closeAddRecipe();
+    renderReceitas();
+    alert("Receita adicionada com sucesso!");
+  };
+  if(file){
+    const reader=new FileReader();
+    reader.onload=()=>finish(reader.result);
+    reader.readAsDataURL(file);
+  }else finish();
+}
+function deleteRecipe(id){
+  if(!confirm("Deseja excluir esta receita?"))return;
+  data.receitas=data.receitas.filter(r=>r.id!==id);
+  save();
+  renderReceitas();
+  alert("Receita excluída com sucesso!");
+}
+function esc(v){
+  return String(v).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+}
+
+function renderAgenda(){
+  const canEdit=role==="ADM";
+  const eventos=Array.isArray(data.agenda)?data.agenda:[];
+  const hoje=new Date();
+  const mesAtual=hoje.getMonth();
+  const anoAtual=hoje.getFullYear();
+  const nomesMes=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+
+  shell("Agenda","Eventos e compromissos da cozinha.",`
+    ${canEdit?`
+    <div class="panel" style="margin-bottom:18px">
+      <div class="panel-head">
+        <h2>📅 Agenda da Cozinha</h2>
+        <span class="muted">ADM</span>
+      </div>
+      <button class="btn orange" onclick="openAddEvent()">➕ ADICIONAR EVENTO</button>
+    </div>
+
+    <div id="eventModal" class="recipe-add-modal" onclick="if(event.target===this)closeEventModal()">
+      <div class="recipe-add-card">
+        <div class="recipe-add-head">
+          <h2>➕ Adicionar evento</h2>
+          <button class="recipe-close" onclick="closeEventModal()">×</button>
+        </div>
+        <div class="form-grid">
+          <input id="eventName" class="field full" placeholder="Nome do evento">
+          <input id="eventDate" class="field" type="date">
+          <input id="eventTime" class="field" type="time">
+          <input id="eventPeople" class="field" type="number" min="0" placeholder="Quantidade de pessoas">
+          <textarea id="eventObs" class="field full" rows="4" placeholder="Observações"></textarea>
+          <div class="recipe-actions full">
+            <button class="btn light" onclick="closeEventModal()">CANCELAR</button>
+            <button class="btn orange" onclick="addEvent()">💾 SALVAR EVENTO</button>
+          </div>
+        </div>
+      </div>
+    </div>`:""}
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>📆 ${nomesMes[mesAtual]} ${anoAtual}</h2>
+        <span class="muted">${eventos.length} evento(s)</span>
+      </div>
+      <div class="recipe-grid">
+        ${eventos.length?eventos.slice().sort((a,b)=>(a.data||"").localeCompare(b.data||"")).map(e=>`
+          <div class="recipe-card clickable" data-event-id="${esc(e.id)}" onclick="openEvent(this.dataset.eventId)">
+            <div class="recipe-empty" style="height:120px;font-size:38px">📅</div>
+            <div class="recipe-body">
+              <span class="recipe-tag">${formatEventDate(e.data)}</span>
+              <h3>${esc(e.nome)}</h3>
+              <p class="muted">⏰ ${esc(e.hora||"Sem horário")} · 👥 ${esc(e.pessoas||"0")} pessoas</p>
+              <p class="muted">Clique para ver detalhes</p>
+            </div>
+          </div>`).join(""):`<div class="empty-state" style="padding:30px">Nenhum evento cadastrado.</div>`}
+      </div>
+    </div>`);
+}
+
+function openAddEvent(){
+  const m=document.getElementById("eventModal");
+  if(!m)return;
+  m.classList.add("show");
+  const d=new Date();
+  document.getElementById("eventDate").value=d.toISOString().slice(0,10);
+  setTimeout(()=>document.getElementById("eventName")?.focus(),50);
+}
+
+function closeEventModal(){
+  document.getElementById("eventModal")?.classList.remove("show");
+}
+
+function addEvent(){
+  const nome=document.getElementById("eventName").value.trim();
+  const dataEvento=document.getElementById("eventDate").value;
+  const hora=document.getElementById("eventTime").value;
+  const pessoas=document.getElementById("eventPeople").value;
+  const obs=document.getElementById("eventObs").value.trim();
+
+  if(!nome||!dataEvento){
+    alert("Informe o nome e a data do evento.");
+    return;
+  }
+
+  if(!Array.isArray(data.agenda))data.agenda=[];
+  data.agenda.push({
+    id:Date.now(),
+    nome,
+    data:dataEvento,
+    hora,
+    pessoas:pessoas||0,
+    obs
+  });
+  save();
+  closeEventModal();
+  renderAgenda();
+  alert("Evento adicionado com sucesso!");
+}
+
+function openEvent(id){
+  const e=(data.agenda||[]).find(x=>String(x.id)===String(id));
+  if(!e)return;
+  const canEdit=role==="ADM";
+
+  shell("Detalhes do Evento","Informações do compromisso da cozinha.",`
+    <div class="panel">
+      <span class="recipe-tag">📅 ${formatEventDate(e.data)}</span>
+      <h2 style="font:30px Georgia,serif;color:var(--green);margin:12px 0">${esc(e.nome)}</h2>
+      <div class="list-item"><b>Data</b><span>${formatEventDate(e.data)}</span></div>
+      <div class="list-item"><b>Horário</b><span>${esc(e.hora||"Não informado")}</span></div>
+      <div class="list-item"><b>Pessoas</b><span>${esc(e.pessoas||"0")}</span></div>
+      <div class="ingredient-box">
+        <h3 style="margin-top:0">📝 Observações</h3>
+        <p class="muted" style="white-space:pre-wrap">${esc(e.obs||"Nenhuma observação cadastrada.")}</p>
+      </div>
+      <div class="recipe-actions">
+        ${canEdit?`
+          <button class="btn orange" data-event-id="${esc(e.id)}" onclick="editEvent(this.dataset.eventId)">✏️ EDITAR</button>
+          <button type="button" class="btn red" onclick="ccDeleteEvento(this.getAttribute('data-id'))" data-id="${esc(e.id)}">🗑️ EXCLUIR</button>
+        `:""}
+        <button class="btn light" onclick="renderAgenda()">← VOLTAR</button>
+      </div>
+    </div>`);
+}
+
+function editEvent(id){
+  const e=(data.agenda||[]).find(x=>String(x.id)===String(id));
+  if(!e)return;
+  shell("Editar Evento","Altere os dados do evento.",`
+    <div class="recipe-form">
+      <div class="form-grid">
+        <input id="editEventName" class="field full" value="${esc(e.nome)}" placeholder="Nome do evento">
+        <input id="editEventDate" class="field" type="date" value="${esc(e.data)}">
+        <input id="editEventTime" class="field" type="time" value="${esc(e.hora||"")}">
+        <input id="editEventPeople" class="field" type="number" min="0" value="${esc(e.pessoas||0)}" placeholder="Quantidade de pessoas">
+        <textarea id="editEventObs" class="field full" rows="4" placeholder="Observações">${esc(e.obs||"")}</textarea>
+        <div class="recipe-actions full">
+          <button class="btn light" data-event-id="${esc(e.id)}" onclick="openEvent(this.dataset.eventId)">CANCELAR</button>
+          <button class="btn orange" data-event-id="${esc(e.id)}" onclick="saveEventEdit(this.dataset.eventId)">💾 SALVAR ALTERAÇÕES</button>
+        </div>
+      </div>
+    </div>`);
+}
+
+function saveEventEdit(id){
+  const e=(data.agenda||[]).find(x=>String(x.id)===String(id));
+  if(!e)return;
+  const nome=document.getElementById("editEventName").value.trim();
+  const dataEvento=document.getElementById("editEventDate").value;
+  if(!nome||!dataEvento){
+    alert("Informe o nome e a data do evento.");
+    return;
+  }
+  e.nome=nome;
+  e.data=dataEvento;
+  e.hora=document.getElementById("editEventTime").value;
+  e.pessoas=document.getElementById("editEventPeople").value||0;
+  e.obs=document.getElementById("editEventObs").value.trim();
+  save();
+  openEvent(id);
+  alert("Evento alterado com sucesso!");
+}
+
+function deleteEvent(id){
+  if(role!=="ADM"){ alert("Somente o ADM pode excluir eventos."); return false; }
+  const alvo=String(id ?? "");
+  if(!Array.isArray(data.agenda)) data.agenda=[];
+  const antes=data.agenda.length;
+  data.agenda=data.agenda.filter(e=>String(e.id)!==alvo);
+  if(data.agenda.length===antes){ alert("Evento não encontrado."); return false; }
+  save();
+  renderAgenda();
+  return false;
+}
+
+function formatEventDate(v){
+  if(!v)return "Data não informada";
+  const p=v.split("-");
+  if(p.length!==3)return v;
+  return `${p[2]}/${p[1]}/${p[0]}`;
+}
+
+function renderAvisos(){
+  const avisos=Array.isArray(data.avisos)?data.avisos:[];
+  let idsAlterados=false;
+  avisos.forEach((a,i)=>{
+    if(a.id==null || a.id===""){ a.id="aviso-"+Date.now()+"-"+i+"-"+Math.random().toString(36).slice(2,7); idsAlterados=true; }
+  });
+  if(idsAlterados) save();
+  const obs=(data.observacoesADM||[]);
+  const canEdit=role==="ADM";
+  shell('Mural de Avisos','Comunicação oficial da cozinha.',`
+    <div class="panel">
+      <div class="panel-head">
+        <h2>📢 Avisos</h2>
+        ${canEdit?'<button class="btn orange" onclick="publicar()">+ Publicar aviso</button>':''}
+      </div>
+      ${avisos.map(a=>`<div class="notice">
+  ${a.img?`<img class="notice-photo" src="${a.img}" alt="Foto do aviso" onclick="abrirFotoMural('${a.img.replace(/'/g,"\\'")}');event.stopPropagation()">`:''}
+  <b>${esc(a.t)}</b><br>
+  <span class="muted">${esc(a.d)} · ${esc(a.data||"")}</span>
+  ${canEdit?`<div class="recipe-actions" style="margin-top:10px">
+    <button class="btn light" data-id="${esc(a.id)}" onclick="editarAviso(this.dataset.id)">✏️ EDITAR</button>
+    <button type="button" class="btn red" onclick="ccDeleteAviso(this.getAttribute('data-id'))" data-id="${esc(a.id)}">🗑️ EXCLUIR</button>
+  </div>`:''}
+</div>`).join('')||'<p class="muted">Nenhum aviso publicado.</p>'}
+    </div>
+
+    ${canEdit?`
+    <div class="panel" style="margin-top:18px">
+      <div class="panel-head">
+        <h2>💬 Observações recebidas</h2>
+        <span class="muted">${obs.length} enviada(s)</span>
+      </div>
+      ${obs.map(o=>`<div class="notice">
+        <b>👤 ${esc(o.usuario)}</b>
+        <p style="margin:8px 0">${esc(o.texto)}</p>
+        <span class="muted">${esc(o.data)}</span>
+      </div>`).join('')||'<p class="muted">Nenhuma observação recebida.</p>'}
+    </div>`:`
+    <div class="panel" style="margin-top:18px">
+      <div class="panel-head"><h2>💬 Falar com o ADM</h2></div>
+      <p class="muted">Use este campo para enviar uma observação, dúvida ou informação diretamente para o administrador.</p>
+      <textarea id="observacaoADM" class="field full" rows="5" placeholder="Digite sua observação para o ADM..."></textarea>
+      <button class="btn orange full" style="margin-top:10px" onclick="enviarObservacaoADM()">ENVIAR OBSERVAÇÃO AO ADM</button>
+    </div>`}
+  `)
+}
+
+function initials(name){return (name||'F').trim().split(/\s+/).map(x=>x[0]).slice(0,2).join('').toUpperCase()}
+function employeePhotoHTML(f,size=72){return f.imagem?`<img class="employee-photo" style="width:${size}px;height:${size}px" src="${f.imagem}" alt="Foto do funcionário">`:`<div class="employee-photo" style="width:${size}px;height:${size}px">${esc(initials(f.nome))}</div>`}
+function employeeCardHTML(f){const id=String(f.id).replace(/'/g,"\\'");return `<div class="panel employee-card"><div class="employee-status"><span class="status ${f.ativo?'approved':'rejected'}">${f.ativo?'Ativo':'Inativo'}</span></div><div class="employee-top">${employeePhotoHTML(f)}<div><h3 style="margin:0 0 4px">${esc(f.nome)}</h3><div class="muted">${esc(f.cargo)}</div><div class="muted" style="margin-top:4px">@${esc(f.usuario)}</div></div></div><div class="employee-actions"><button class="btn light" onclick="editEmployee('${id}')">✏️ EDITAR</button><button class="btn" onclick="toggleEmployee('${id}')">${f.ativo?'🔒 BLOQUEAR':'🔓 ATIVAR'}</button><button type="button" class="btn red" onclick="deleteEmployee('${id}')">🗑️ EXCLUIR</button></div></div>`}
+let employeeEditId='';
+function renderFuncionarios(){
+ if(role!=='ADM'){const f=(data.funcionarios||[]).find(x=>x.id===window.currentEmployeeId)||{};shell('Meu perfil','Seu perfil no COZINHA CONNECT.',`<div class="panel"><div class="employee-top">${employeePhotoHTML(f,88)}<div><h2 style="margin:0">${esc(f.nome||'Funcionário')}</h2><div class="muted">${esc(f.cargo||'Funcionário')}</div><div style="margin-top:8px"><span class="status approved">● Ativo</span></div></div></div></div>`);return;}
+ shell('Funcionários','Cadastre e organize a equipe da cozinha.',`<div class="panel" style="margin-bottom:18px"><div class="panel-head"><div><h2>👥 Equipe</h2><span class="muted">Perfis com foto e acesso individual.</span></div><button class="btn orange" onclick="openEmployeeModal()">➕ ADICIONAR FUNCIONÁRIO</button></div></div><div class="employee-grid">${(data.funcionarios||[]).map(employeeCardHTML).join('')||'<div class="panel"><p class="muted">Nenhum funcionário cadastrado.</p></div>'}</div><div id="employeeModal" class="modal" onclick="if(event.target===this)closeEmployeeModal()"><div class="modal-card"><h3 id="employeeModalTitle">➕ Adicionar funcionário</h3><input id="employeeName" class="field" placeholder="Nome completo"><input id="employeeRole" class="field" placeholder="Cargo / função"><input id="employeeUser" class="field" placeholder="Usuário"><input id="employeePass" class="field" type="password" placeholder="Senha"><label class="photo-label" for="employeePhoto">📷 Adicionar foto</label><input id="employeePhoto" type="file" accept="image/*" style="display:none" onchange="previewEmployeePhoto(event)"><img id="employeePreview" class="photo-preview" alt="Prévia"><div class="modal-actions"><button class="btn light" onclick="closeEmployeeModal()">CANCELAR</button><button class="btn orange" onclick="saveEmployee()">SALVAR FUNCIONÁRIO</button></div></div></div>`)
+}
+function openEmployeeModal(id=''){employeeEditId=id||'';const f=id?(data.funcionarios||[]).find(x=>String(x.id)===String(id)):null;document.getElementById('employeeModalTitle').textContent=f?'✏️ Editar funcionário':'➕ Adicionar funcionário';document.getElementById('employeeName').value=f?.nome||'';document.getElementById('employeeRole').value=f?.cargo||'';document.getElementById('employeeUser').value=f?.usuario||'';document.getElementById('employeePass').value=f?.senha||'';document.getElementById('employeePhoto').value='';document.getElementById('employeePreview').src=f?.imagem||'';document.getElementById('employeePreview').style.display=f?.imagem?'block':'none';document.getElementById('employeeModal').classList.add('show')}
+function closeEmployeeModal(){const m=document.getElementById('employeeModal');if(m)m.classList.remove('show');employeeEditId=''}
+function previewEmployeePhoto(e){const file=e.target.files?.[0];if(!file)return;if(file.size>4*1024*1024){alert('Escolha uma foto de até 4 MB.');e.target.value='';return}const r=new FileReader();r.onload=()=>{const p=document.getElementById('employeePreview');p.src=r.result;p.style.display='block'};r.readAsDataURL(file)}
+function saveEmployee(){const nome=document.getElementById('employeeName').value.trim(),cargo=document.getElementById('employeeRole').value.trim(),usuario=document.getElementById('employeeUser').value.trim(),senha=document.getElementById('employeePass').value.trim(),file=document.getElementById('employeePhoto').files?.[0];if(!nome||!cargo||!usuario||!senha)return alert('Preencha nome, cargo, usuário e senha.');if(!Array.isArray(data.funcionarios))data.funcionarios=[];if(!employeeEditId&&data.funcionarios.some(x=>x.usuario.toLowerCase()===usuario.toLowerCase()))return alert('Este usuário já está cadastrado.');const finish=img=>{if(employeeEditId){const f=data.funcionarios.find(x=>String(x.id)===String(employeeEditId));if(!f)return;Object.assign(f,{nome,cargo,usuario,senha,imagem:img})}else data.funcionarios.push({id:'func-'+Date.now(),nome,cargo,usuario,senha,ativo:true,imagem:img});save();closeEmployeeModal();renderFuncionarios()};if(file){const r=new FileReader();r.onload=()=>finish(r.result);r.readAsDataURL(file)}else finish(employeeEditId?((data.funcionarios.find(x=>String(x.id)===String(employeeEditId))||{}).imagem||''):'')}
+function editEmployee(id){openEmployeeModal(id)}
+function toggleEmployee(id){const f=(data.funcionarios||[]).find(x=>String(x.id)===String(id));if(!f)return;f.ativo=!f.ativo;save();renderFuncionarios()}
+function deleteEmployee(id){id=String(id);const list=Array.isArray(data.funcionarios)?data.funcionarios:[];const idx=list.findIndex(x=>String(x.id)===id);if(idx<0){alert('Funcionário não encontrado.');return false;}list.splice(idx,1);data.funcionarios=list;save();renderFuncionarios();return false;}
+function renderConfig(){
+ if(role!=='ADM'){
+   shell('Configurações','Informações do sistema.',`<div class="panel"><h2>⚙ Configurações</h2><div class="list-item"><div><b>Perfil</b><span class="muted">Usuário conectado</span></div><span>Funcionário</span></div><p class="muted" style="margin-top:14px">As configurações da empresa são administradas pelo ADM.</p></div>`);return;
+ }
+ if(!data.config) data.config={empresa:'',telefone:'',whatsapp:'',endereco:'',responsavel:'',logo:''};
+ const c=data.config;
+ shell('Configurações','Configure as informações da empresa que aparecem no COZINHA CONNECT.',`
+ <div class="panel">
+   <div class="panel-head"><div><h2>🏢 Dados da empresa</h2><span class="muted">Essas informações ficam salvas neste dispositivo.</span></div></div>
+   <div class="config-grid">
+     <div><label class="field-label">Nome do restaurante / empresa</label><input id="cfgEmpresa" class="field" value="${esc(c.empresa||'')}" placeholder="Ex.: Restaurante Sabor da Casa"></div>
+     <div><label class="field-label">Nome do responsável</label><input id="cfgResponsavel" class="field" value="${esc(c.responsavel||'')}" placeholder="Responsável pela operação"></div>
+     <div><label class="field-label">Telefone</label><input id="cfgTelefone" class="field" value="${esc(c.telefone||'')}" placeholder="(65) 0000-0000"></div>
+     <div><label class="field-label">WhatsApp</label><input id="cfgWhatsapp" class="field" value="${esc(c.whatsapp||'')}" placeholder="(65) 90000-0000"></div>
+     <div style="grid-column:1/-1"><label class="field-label">Endereço</label><input id="cfgEndereco" class="field" value="${esc(c.endereco||'')}" placeholder="Rua, número, bairro, cidade"></div>
+   </div>
+   <div style="margin-top:18px;padding-top:18px;border-top:1px solid #eee">
+     <label class="field-label">Logo da empresa</label>
+     <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+       <div id="cfgLogoBox" style="width:90px;height:90px;border:1px dashed #ccc;border-radius:16px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#fafafa">${c.logo?`<img src="${c.logo}" style="width:100%;height:100%;object-fit:contain">`:'🏢'}</div>
+       <div><label class="btn light" for="cfgLogo">📷 ESCOLHER LOGO</label><input id="cfgLogo" type="file" accept="image/*" style="display:none" onchange="previewCompanyLogo(event)"><div class="muted" style="margin-top:7px">PNG ou JPG • até 4 MB</div></div>
+     </div>
+   </div>
+   <div class="panel" style="margin-top:18px;border:1px solid #eee">
+     <div class="panel-head"><div><h2>🔐 Segurança do ADM</h2><span class="muted">Altere a senha usada para entrar como administrador.</span></div></div>
+     <div class="config-grid">
+       <div><label class="field-label">Usuário do ADM</label><input id="cfgAdminUser" class="field" value="${esc(data.config.adminUsuario||'admin')}" placeholder="admin"></div>
+       <div><label class="field-label">Senha atual</label><input id="cfgAdminCurrent" class="field" type="password" placeholder="Digite a senha atual"></div>
+       <div><label class="field-label">Nova senha</label><input id="cfgAdminNew" class="field" type="password" placeholder="Digite a nova senha"></div>
+       <div><label class="field-label">Confirmar nova senha</label><input id="cfgAdminConfirm" class="field" type="password" placeholder="Repita a nova senha"></div>
+     </div>
+     <div class="modal-actions" style="margin-top:16px"><button class="btn orange" onclick="changeAdminPassword()">🔐 ALTERAR SENHA DO ADM</button></div>
+   </div>
+   <div class="modal-actions" style="margin-top:22px"><button class="btn orange" onclick="saveCompanyConfig()">💾 SALVAR DADOS DA EMPRESA</button></div>
+ </div>`)
+}
+function previewCompanyLogo(e){const file=e.target.files?.[0];if(!file)return;if(file.size>4*1024*1024){alert('Escolha uma imagem de até 4 MB.');e.target.value='';return}const r=new FileReader();r.onload=()=>{const box=document.getElementById('cfgLogoBox');if(box)box.innerHTML=`<img src="${r.result}" style="width:100%;height:100%;object-fit:contain">`;box.dataset.logo=r.result};r.readAsDataURL(file)}
+function changeAdminPassword(){
+  if(role!=="ADM") return alert("Somente o ADM pode alterar a senha.");
+  if(!data.config)data.config={};
+  const usuario=document.getElementById('cfgAdminUser').value.trim();
+  const atual=document.getElementById('cfgAdminCurrent').value;
+  const nova=document.getElementById('cfgAdminNew').value.trim();
+  const confirma=document.getElementById('cfgAdminConfirm').value.trim();
+  const senhaAtual=data.config.adminSenha||"1234";
+  if(atual!==senhaAtual)return alert("A senha atual está incorreta.");
+  if(nova.length<4)return alert("A nova senha deve ter pelo menos 4 caracteres.");
+  if(nova!==confirma)return alert("A confirmação da nova senha não confere.");
+  if(!usuario)return alert("Informe o usuário do ADM.");
+  data.config.adminUsuario=usuario;
+  data.config.adminSenha=nova;
+  save();
+  document.getElementById('cfgAdminCurrent').value='';
+  document.getElementById('cfgAdminNew').value='';
+  document.getElementById('cfgAdminConfirm').value='';
+  alert('Senha do ADM alterada com sucesso!');
+}
+
+function saveCompanyConfig(){
+ if(!data.config)data.config={};
+ data.config.empresa=document.getElementById('cfgEmpresa').value.trim();
+ data.config.responsavel=document.getElementById('cfgResponsavel').value.trim();
+ data.config.telefone=document.getElementById('cfgTelefone').value.trim();
+ data.config.whatsapp=document.getElementById('cfgWhatsapp').value.trim();
+ data.config.endereco=document.getElementById('cfgEndereco').value.trim();
+ const box=document.getElementById('cfgLogoBox'); if(box?.dataset.logo)data.config.logo=box.dataset.logo;
+ save(); alert('Dados da empresa salvos com sucesso!'); renderConfig();
+}
+
+// Wrappers de exclusão: recebem o ID diretamente do botão e atualizam a tela.
+function ccDeleteAviso(id){ return excluirAviso(id); }
+function ccDeleteEvento(id){ return deleteEvent(id); }
+// Exclusão usa os próprios botões, com o ID passado diretamente para a função.
+
+// ===== CONTROLE DE COMPRAS - VERSAO ROBUSTA =====
+window.ccSetPurchaseStatus = function(id, status){
+  if (role !== 'ADM') { alert('Somente o ADM pode alterar o status da compra.'); return false; }
+  const item = (data.compras || []).find(c => String(c.id) === String(id));
+  if (!item) { alert('Solicitação de compra não encontrada.'); return false; }
+  if (status === 'Compra negada') {
+    const motivo = prompt('Informe o motivo da compra negada:');
+    if (motivo === null) { renderCompras(); return false; }
+    item.motivoNegacao = motivo.trim() || 'Não informado.';
+  } else {
+    item.motivoNegacao = '';
+  }
+  item.status = status;
+  save();
+  renderCompras();
+  return false;
+};
+window.ccAdvancePurchase = function(id){
+  if (role !== 'ADM') { alert('Somente o ADM pode alterar o status da compra.'); return false; }
+  const item = (data.compras || []).find(c => String(c.id) === String(id));
+  if (!item) { alert('Solicitação de compra não encontrada.'); return false; }
+  const fluxo = { 'Pendente':'Em compra', 'Em compra':'Comprado', 'Comprado':'Entregue', 'Entregue':'Entregue', 'Compra negada':'Compra negada' };
+  return window.ccSetPurchaseStatus(id, fluxo[item.status] || 'Em compra');
+};
+window.ccDenyPurchase = function(id){ return window.ccSetPurchaseStatus(id, 'Compra negada'); };
+window.ccDeletePurchase = function(id){
+  if (role !== 'ADM') { alert('Somente o ADM pode excluir solicitações.'); return false; }
+  const antes = (data.compras || []).length;
+  data.compras = (data.compras || []).filter(c => String(c.id) !== String(id));
+  if (data.compras.length === antes) { alert('Solicitação de compra não encontrada.'); return false; }
+  save();
+  renderCompras();
+  return false;
+};
+// Mantém compatibilidade com qualquer botão antigo que ainda esteja no HTML.
+window.changeBuyStatus = window.ccSetPurchaseStatus;
+window.advancePurchase = window.ccAdvancePurchase;
+window.denyPurchase = window.ccDenyPurchase;
+
+// Eventos do módulo de Compras: delegação única, sem depender de onclick inline.
+document.addEventListener('change', function(e){
+  const el=e.target.closest('.js-buy-status');
+  if(!el) return;
+  window.ccSetPurchaseStatus(el.dataset.buyId, el.value);
+});
+document.addEventListener('click', function(e){
+  const btn=e.target.closest('.js-buy-action');
+  if(!btn) return;
+  e.preventDefault();
+  const id=btn.dataset.buyId, action=btn.dataset.buyAction;
+  if(action==='approve') window.aprovarCompra(id);
+  else if(action==='advance') window.ccAdvancePurchase(id);
+  else if(action==='deny') window.ccDenyPurchase(id);
+  else if(action==='delete') window.ccDeletePurchase(id);
+});
+window.deletePurchase = window.ccDeletePurchase;
+window.aprovarCompra = aprovarCompra;
+window.imprimirListaCompras = imprimirListaCompras;
+
+
+
+
+/* Dashboard profissional — sobrescreve somente a apresentação da Home. */
+function ccProEsc(v){return typeof esc==='function'?esc(v):String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function ccProDateParts(raw){const d=String(raw||'').split('-'); if(d.length===3)return {day:d[2],mon:d[1]}; return {day:'--',mon:'---'};}
+function ccProStatus(status){if(status==='Pendente')return '<span class="pro-pill pending">Pendente</span>';if(status==='Em compra')return '<span class="pro-pill buying">Em compra</span>';if(status==='Comprado')return '<span class="pro-pill done">Comprado</span>';if(status==='Entregue')return '<span class="pro-pill delivered">Entregue</span>';return '<span class="pro-pill pending">Negado</span>';}
+function ccProPurchaseTable(items){
+ if(!items.length)return '<div class="pro-empty">Nenhuma solicitação registrada ainda.</div>';
+ return `<div class="pro-table-wrap"><table class="pro-table"><thead><tr><th>Produto</th><th>Qtd.</th><th>Solicitante</th><th>Status</th></tr></thead><tbody>${items.map(x=>`<tr><td><b>${ccProEsc(x.produto||'Produto')}</b></td><td>${ccProEsc(x.qtd||'')} ${ccProEsc(x.unidade||'')}</td><td>${ccProEsc(x.usuario||x.solicitante||'Equipe')}</td><td>${ccProStatus(x.status)}</td></tr>`).join('')}</tbody></table></div>`;
+}
+function ccProEvents(events){
+ const list=(events||[]).slice().sort((a,b)=>String(a.data||'').localeCompare(String(b.data||''))).slice(0,3);
+ if(!list.length)return '<div class="pro-empty">Nenhum compromisso cadastrado.</div>';
+ return list.map((e,i)=>{const p=ccProDateParts(e.data);return `<div class="pro-event"><div class="pro-date">${ccProEsc(p.day)}<br>${ccProEsc(p.mon)}</div><div style="flex:1"><b>${ccProEsc(e.nome||'Compromisso')}</b><small>👥 ${ccProEsc(e.pessoas||'Toda a equipe')} · ⏰ ${ccProEsc(e.hora||'Sem horário')}</small></div>${i===0?'<span class="pro-event-tag">PRÓXIMO</span>':''}</div>`}).join('');
+}
+function ccProEmployees(funcionarios){
+ if(!funcionarios.length)return '<div class="pro-empty">Nenhum funcionário ativo.</div>';
+ return funcionarios.slice(0,5).map(f=>`<div class="pro-employee"><div class="pro-avatar">${f.imagem?`<img src="${f.imagem}">`:ccProEsc(initials(f.nome))}</div><div><b>${ccProEsc(f.nome)}</b><small>${ccProEsc(f.cargo||'Colaborador')}</small></div><span class="pro-online" title="Ativo"></span></div>`).join('');
+}
+function ccProTasks(){const s=countByStatus();return `<div class="pro-task"><span class="pro-check">✓</span><span style="flex:1">Aprovar solicitações de compra</span>${s.p?`<span class="pro-count">${s.p}</span>`:''}</div><div class="pro-task"><span class="pro-check">✓</span><span style="flex:1">Conferir novos avisos</span></div><div class="pro-task"><span class="pro-check">✓</span><span style="flex:1">Conferir agenda do dia</span></div><div class="pro-task"><span class="pro-check">✓</span><span style="flex:1">Revisar receitas</span></div><div class="pro-task"><span class="pro-check">□</span><span style="flex:1">Planejar cardápio da próxima semana</span></div>`;}
+function renderADM(){
+ const s=countByStatus(), funcionarios=(data.funcionarios||[]).filter(f=>f.ativo), avisos=(data.avisos||[]), compras=(data.compras||[]).slice(0,5);
+ const total=s.p+s.b+s.c+s.d+s.n;
+ document.getElementById('content').innerHTML=`<div class="pro-dashboard">
+  <section class="pro-hero"><div class="pro-hero-copy"><div class="pro-eyebrow">GESTÃO OPERACIONAL • COZINHA CONNECT</div><h1>Bom dia, <span>Hyagho!</span></h1><p>Tudo organizado para uma cozinha mais produtiva hoje.</p><div class="pro-divider"></div></div><div class="pro-hero-meta"><div>📅<strong>${new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'})}</strong></div><div>☀️<strong>Cozinha em operação</strong></div></div></section>
+  <div class="pro-kpis">
+   <div class="pro-kpi"><div class="pro-kpi-icon">👥</div><div><div class="pro-kpi-label">Equipe</div><div class="pro-kpi-number">${funcionarios.length}</div><div class="pro-kpi-sub">funcionários ativos</div></div></div>
+   <div class="pro-kpi"><div class="pro-kpi-icon">🛒</div><div><div class="pro-kpi-label">Compras</div><div class="pro-kpi-number">${s.p}</div><div class="pro-kpi-sub">solicitações pendentes</div></div></div>
+   <div class="pro-kpi"><div class="pro-kpi-icon">📅</div><div><div class="pro-kpi-label">Agenda</div><div class="pro-kpi-number">${(data.agenda||[]).length}</div><div class="pro-kpi-sub">compromissos cadastrados</div></div></div>
+   <div class="pro-kpi"><div class="pro-kpi-icon">📢</div><div><div class="pro-kpi-label">Avisos</div><div class="pro-kpi-number">${avisos.length}</div><div class="pro-kpi-sub">publicações recentes</div></div></div>
+  </div>
+  <div class="pro-row main-row">
+   <section class="pro-panel dark"><div class="pro-head"><h2 class="pro-title">🛒 Status das compras</h2><button class="pro-link" onclick="navigate('compras')">Ver todas →</button></div><div class="purchase-flex"><div class="pro-donut-wrap"><div class="pro-donut"></div><div class="pro-donut-center"><strong>${total}</strong><span>solicitações</span></div></div><div class="pro-legend"><span><i class="pro-dot" style="background:#d83d3d"></i>${s.p} Pendentes</span><span><i class="pro-dot" style="background:#d9a12e"></i>${s.b} Em compra</span><span><i class="pro-dot" style="background:#37a46a"></i>${s.c} Comprados</span><span><i class="pro-dot" style="background:#356fc3"></i>${s.d} Entregues</span><span><i class="pro-dot" style="background:#9da6a9"></i>${s.n} Negados</span></div></div></section>
+   <section class="pro-panel"><div class="pro-head"><h2 class="pro-title">🛒 Últimas solicitações</h2><button class="pro-link" onclick="navigate('compras')">Ver todas →</button></div>${ccProPurchaseTable(compras)}</section>
+   <section class="pro-panel"><div class="pro-head"><h2 class="pro-title">📅 Próximos compromissos</h2><button class="pro-link" onclick="navigate('agenda')">Ver agenda →</button></div>${ccProEvents(data.agenda)}</section>
+  </div>
+  <div class="pro-row bottom-row">
+   <section class="pro-panel"><div class="pro-head"><h2 class="pro-title">👥 Equipe online</h2><button class="pro-link" onclick="navigate('funcionarios')">Ver todos →</button></div>${ccProEmployees(funcionarios)}</section>
+   <section class="pro-panel"><div class="pro-head"><h2 class="pro-title">✓ Tarefas de hoje</h2><button class="pro-link" onclick="navigate('compras')">Ver pendências →</button></div>${ccProTasks()}</section>
+   <section class="pro-quote"><div><p>Organização também é receita de sucesso.</p><i></i></div></section>
+  </div>
+ </div>`;
+}
+function renderFUNC(){
+ const f=getCurrentEmployee(); if(!f){alert('Funcionário não encontrado.');logout();return;} let minhas=data.compras.filter(x=>String(x.usuarioId||'')===String(f.id)); if(!minhas.length&&f.usuario==='joao')minhas=data.compras.filter(x=>x.usuario==='João'); const ap=minhas.filter(x=>x.status==='Comprado'||x.status==='Entregue').length,pe=minhas.filter(x=>x.status==='Pendente'||x.status==='Em compra').length;
+ const eventos=Array.isArray(data.agenda)?data.agenda.slice(0,3):[];
+ document.getElementById('content').innerHTML=`<div class="pro-dashboard"><section class="pro-hero"><div class="pro-hero-copy"><div class="pro-eyebrow">ÁREA DO COLABORADOR • COZINHA CONNECT</div><h1>Bom dia, <span>${ccProEsc(f.nome.split(' ')[0])}!</span></h1><p>${ccProEsc(f.cargo||'Colaborador')} · Tudo o que você precisa para o seu dia.</p><div class="pro-divider"></div></div></section><div class="pro-kpis"><div class="pro-kpi"><div class="pro-kpi-icon">🛒</div><div><div class="pro-kpi-label">Minhas compras</div><div class="pro-kpi-number">${minhas.length}</div><div class="pro-kpi-sub">solicitações</div></div></div><div class="pro-kpi"><div class="pro-kpi-icon">✓</div><div><div class="pro-kpi-label">Concluídas</div><div class="pro-kpi-number">${ap}</div><div class="pro-kpi-sub">compradas ou entregues</div></div></div><div class="pro-kpi"><div class="pro-kpi-icon">⏳</div><div><div class="pro-kpi-label">Em andamento</div><div class="pro-kpi-number">${pe}</div><div class="pro-kpi-sub">aguardando atendimento</div></div></div><div class="pro-kpi"><div class="pro-kpi-icon">📖</div><div><div class="pro-kpi-label">Receitas</div><div class="pro-kpi-number">${data.receitas.length}</div><div class="pro-kpi-sub">disponíveis para consulta</div></div></div></div><div class="pro-row main-row"><section class="pro-panel"><div class="pro-head"><h2 class="pro-title">🛒 Nova solicitação</h2></div><div class="form-grid"><input id="p" class="field" placeholder="Produto"><input id="q" class="field" placeholder="Quantidade"><input id="o" class="field full" placeholder="Observação (opcional)"><button class="btn orange full" onclick="requestBuy()">ENVIAR AO ADM</button></div></section><section class="pro-panel"><div class="pro-head"><h2 class="pro-title">📅 Próximos compromissos</h2><button class="pro-link" onclick="navigate('agenda')">Ver agenda →</button></div>${ccProEvents(eventos)}</section><section class="pro-panel"><div class="pro-head"><h2 class="pro-title">📖 Caderno de receitas</h2><button class="pro-link" onclick="navigate('receitas')">Ver receitas →</button></div>${data.receitas.slice(0,5).map(x=>`<div class="pro-task"><span style="flex:1"><b>${ccProEsc(x.nome)}</b><br><small class="muted">${ccProEsc(x.categoria||'Receita')}</small></span><span>›</span></div>`).join('')||'<div class="pro-empty">Nenhuma receita cadastrada.</div>'}</section></div><div class="pro-row bottom-row"><section class="pro-panel"><div class="pro-head"><h2 class="pro-title">🛒 Minhas solicitações</h2><button class="pro-link" onclick="navigate('compras')">Ver todas →</button></div>${minhas.slice(0,5).map(x=>`<div class="pro-task"><span style="flex:1"><b>${ccProEsc(x.produto)} — ${ccProEsc(x.qtd)} ${ccProEsc(x.unidade||'')}</b><br><small class="muted">${ccProEsc(x.data||'')}</small></span>${ccProStatus(x.status)}</div>`).join('')||'<div class="pro-empty">Você ainda não enviou solicitações.</div>'}</section><section class="pro-panel"><div class="pro-head"><h2 class="pro-title">📢 Avisos recentes</h2><button class="pro-link" onclick="navigate('avisos')">Ver mural →</button></div>${(data.avisos||[]).slice(0,5).map(a=>`<div class="pro-task"><span style="flex:1"><b>${ccProEsc(a.t)}</b><br><small class="muted">${ccProEsc(a.data||'')}</small></span>›</div>`).join('')||'<div class="pro-empty">Nenhum aviso publicado.</div>'}</section><section class="pro-quote"><div><p>Organização também é receita de sucesso.</p><i></i></div></section></div></div>`;
+}
+</script>
+
+<script>
+(function(){
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function(){ navigator.serviceWorker.register('./sw.js').catch(function(e){ console.warn('PWA:', e); }); });
+  }
+  var deferredPrompt;
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault(); deferredPrompt=e;
+    var b=document.getElementById('installPwaBtn');
+    if(b){ b.style.display='inline-flex'; b.onclick=function(){ deferredPrompt.prompt(); deferredPrompt.userChoice.finally(function(){ deferredPrompt=null; b.style.display='none'; }); }; }
+  });
+  window.addEventListener('appinstalled', function(){ var b=document.getElementById('installPwaBtn'); if(b)b.style.display='none'; });
+})();
+</script>
+</body>
+</html><script>
+(function(){
+  if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{})); }
+  let deferredPrompt=null;
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault(); deferredPrompt=e; showInstall();});
+  window.addEventListener('appinstalled',()=>{deferredPrompt=null; hideInstall();});
+  function isStandalone(){return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true;}
+  function showInstall(){
+    if(isStandalone() || document.getElementById('pwa-install-banner')) return;
+    const b=document.createElement('div'); b.id='pwa-install-banner';
+    b.innerHTML='<div class="pwa-install"><div><b>📱 Instale o COZINHA CONNECT</b><span>Tenha o sistema na tela inicial como um aplicativo.</span></div><button id="pwa-install-btn">Instalar</button><button id="pwa-install-close" aria-label="Fechar">×</button></div>';
+    document.body.appendChild(b);
+    document.getElementById('pwa-install-btn').onclick=async()=>{ if(deferredPrompt){ deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt=null; hideInstall(); } else { alert('No iPhone: abra no Safari, toque em Compartilhar e escolha “Adicionar à Tela de Início”.'); } };
+    document.getElementById('pwa-install-close').onclick=hideInstall;
+  }
+  function hideInstall(){const b=document.getElementById('pwa-install-banner'); if(b)b.remove();}
+  window.addEventListener('load',()=>{ if(!isStandalone() && /iphone|ipad|ipod/i.test(navigator.userAgent)) setTimeout(showInstall,900); });
+})();
+</script>
+<style>
+#pwa-install-banner{position:fixed;left:16px;right:16px;bottom:18px;z-index:99999}
+.pwa-install{max-width:720px;margin:auto;background:#123B4A;color:#fff;border:1px solid #D4A84F;border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 14px 45px #0005}
+.pwa-install div:first-child{flex:1}.pwa-install span{display:block;color:#dce7e1;font-size:12px;margin-top:3px}.pwa-install button{border:0;border-radius:9px;padding:10px 14px;font-weight:800;cursor:pointer}.pwa-install #pwa-install-btn{background:#D4A84F;color:#123B4A}.pwa-install #pwa-install-close{background:transparent;color:#fff;font-size:22px;padding:5px}
+@media(max-width:600px){.pwa-install{padding:12px}.pwa-install span{font-size:11px}.pwa-install #pwa-install-btn{padding:9px 11px}}
+</style>
